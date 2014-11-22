@@ -1,0 +1,75 @@
+html,body,.container
+{
+    height:100%;
+	background:silver;
+}
+.container
+{
+    display:table;
+    width: 100%;
+    margin-top: -50px;
+    padding: 50px 0 0 0; /*set left/right padding according to needs*/
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+header
+{
+    background: green;
+    height: 50px;
+}
+
+.row
+{
+    height: 100%;
+    display: table-row;
+}
+.col-md-1.no-float, .col-md-3.no-float, .col-md-4.no-float, .col-md-8.no-float {
+    float: none; /* thanks baxabbit */
+}
+.col-md-4
+{
+    display: table-cell;
+    background: silver;
+}
+.col-md-1
+{
+    display: table-cell;
+    background: silver;
+}
+
+.col-md-8
+{
+    display: table-cell;
+    background: silver;
+  	
+}
+.col-md-3
+{
+   display: table-cell;
+    background: silver;
+  	
+}
+
+.num{
+padding: 8px 8px 8px 4px;
+display: inline-block;
+text-align: center;
+}
+
+.num-modbutton{
+border: none;
+color: white;
+background: #7f82ac;
+font-size: 14px;
+}
+
+.numButton{
+height: 50px;
+width: 50px;
+margin: 0px 0px 4px 0px;
+font-weight: bold;
+vertical-align: middle;
+color: #555555;
+}
+
+}
