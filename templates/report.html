@@ -100,7 +100,7 @@
               <tr ng-repeat="item in currentBill.items">
                 <td>{{ item.id }}</td>
                 <td>{{ item.name }}</td>
-                <td><input type="text" value="{{ item.quantity }}" style="width:60px" ng-model="item.quantity" ng-blur="updateItem(item)"></input></td>
+                <td>{{ item.quantity }}</td>
                 <td>{{ item.price }}</td>
                 <td>{{item.amount }}</td>
               </tr>

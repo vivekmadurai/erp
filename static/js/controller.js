@@ -82,7 +82,8 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
     
     $scope.printBill = function() {
         if($scope.currentBill) {
-            $("#billDetails").print();
+            var billDetails = $("#billDetails")
+            setTimeout(function(){billDetails.print()}, 500);
             if($scope.bills.draft[$scope.currentBill.id]){
                 delete $scope.bills.draft[$scope.currentBill.id]
             }
@@ -90,7 +91,7 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
 	        //TODO: need to send to server and remove from the completed queue
 	        //...
 	        localStorage.setItem("bills", JSON.stringify($scope.bills));
-	        $scope.currentBill = null;
+	        //$scope.currentBill = null;
 	    }
     }
     
