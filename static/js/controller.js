@@ -83,6 +83,9 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
     $scope.printBill = function() {
         if($scope.currentBill) {
             $("#billDetails").print();
+            if($scope.bills.draft[$scope.currentBill.id]){
+                delete $scope.bills.draft[$scope.currentBill.id]
+            }
 	        $scope.bills.completed[$scope.currentBill.id] = $scope.currentBill;
 	        //TODO: need to send to server and remove from the completed queue
 	        //...
