@@ -8,14 +8,14 @@ f.close()
 
 productList = json.loads(productJson)
 
-productDict = dict()
+products = list()
 for item in productList:
     itemDict = dict()
-    productDict[item.get("item_id")] = itemDict
+    products.append(itemDict)
     itemDict["id"] = item.get("item_id")
     itemDict["name"] = item.get("name")
     itemDict["discount"] = item.get("discount")
     itemDict["price"] = item.get("unit_price")
     
-print json.dumps(productDict)
+print json.dumps(products)
 

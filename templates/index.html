@@ -11,9 +11,7 @@
     <title>ERPFOG - POS</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/css/select2.css" rel="stylesheet">
-    <link href="/static/css/select2-bootstrap.css" rel="stylesheet">
+    <link href="../static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   </head>
 
@@ -35,8 +33,8 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="/home">Home</a></li>
             <li><a href="/report">Report</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#inventory">Inventory</a></li>
+            <li><a href="#user">User</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -52,45 +50,87 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+    {% raw %}
+    <div class="container" ng-app="POSApp">
 
-    <div class="container">
+      <div class="row row-offcanvas row-offcanvas-right">
 
-      <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <h1>Create Bill</h1>
-        <p>This example is a demonstrate product cache.</p>
-        <p>
-          <button type="button" class="btn btn-lg btn-primary" onclick="master.loadProducts()">Sync Products</button>
-        </p>
-        <p>
-		  <input type="text" id="productList" style="width: 300px;" tabindex="-1" title="" onchange="bill.createBill(this)">
-        </p>
-        <p>
-            output:
-        </p>
-        <p id="result">
-        </p>
-        <p>
-            Total:
-        </p>
-        <p id="total"></p>
-      </div>
+        <div class="col-xs-12 col-sm-9" id="billpanel" ng-controller="BillController">
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+          <div class="row">
+            <div class="panel panel-primary">
+			  <div class="panel-heading clearfix">
+			     <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Bill</h4>
+			     <div class="btn-group pull-right">
+			        <a href="#" class="btn btn-default btn-sm" ng-click="createBill()">Create</a>
+			        <a href="#" class="btn btn-default btn-sm">Suspend<span class="badge">2</span></a>
+			        <a href="#" class="btn btn-default btn-sm">Cancel</a>
+			        <!--  button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
+                    <button type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove-circle"></span></button>
+                    <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-ban-circle"></span></button -->  
+			      </div>
+			  </div>
+			
+			  <table class="table" ng-if="current != null">
+	              <tr>
+	                <th>#</th>
+	                <th>Particulars</th>
+	                <th>Quantity</th>
+	                <th>Price</th>
+	                <th>Amount</th>
+	              </tr>
+	              <tr ng-repeat="item in current.items">
+	                <td>{{ item.id }}</td>
+	                <td>{{ item.name }}</td>
+	                <td><input type="text" value="{{ item.quantity }}" style="width:60px" ng-model="item.quantity" ng-blur="updateItem(item)"></input></td>
+	                <td>{{ item.price }}</td>
+	                <td>{{item.amount }}</td>
+	              </tr>
+	              <tr ng-show="current.items.length">
+	                  <td colspan="4" style="text-align: right;"><b>Total</b></td>
+	                  <td>{{ current.total }}</td>
+	              </tr>
+	          </table>
+	          <div ng-hide="current">
+	           <p style="padding:10px"> click Create to proceed</p>
+	          </div>
+			</div>
+          </div><!--/row-->
+        </div><!--/.col-xs-12.col-sm-9-->
+
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation" ng-controller="ProductController">
+          
+          <div class="panel panel-primary">
+              <div class="panel-heading">Products</div>
+              <div class="right-inner-addon">
+                <i class="icon-search"></i>
+                <input type="search" class="form-control" placeholder="Search" ng-model="searchText"/>
+              </div>
+	          <div class="pre-scrollable" >
+	            <a href="#" class="menu-item list-group-item" ng-repeat="product in products | filter:searchText" ng-click="handleClick(product)">{{ product.name }}<span class="badge">Rs. {{ product.price }}</span></a></a>
+	          </div>
+	      </div>
+        </div><!--/.sidebar-offcanvas-->
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <p>&copy; Company 2014</p>
+      </footer>
 
     </div> <!-- /container -->
-
+    {% endraw %}
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/static/js/jquery-2.1.1.min.js"></script>
-    <script src="/static/lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/static/js/select2.min.js"></script>
-    <script src="/static/js/controller.js"></script>
-    <script>
-        var master = new Master();
-        var bill = new Billing();
-        
-        master.listProducts();
-    </script>
+    <script src="../static/lib/jquery/jquery-2.1.1.min.js"></script>
+    <script src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    
+    <script src="../static/lib/angular/angular.min.js"></script>
+    <script src="../static/js/controller.js"></script>
   </body>
 </html>
