@@ -45,16 +45,50 @@ posApp.controller('ProductController', function($scope, $http, sharedService) {
 });
 
 posApp.controller('BillController', function($scope, $http, sharedService) {
-    $scope.current = null;
+    $scope.bills = {completed: {}, draft: {}, canceled: {}};
+    var bills = localStorage.getItem("bills");
+    if(bills){
+        $scope.bills = JSON.parse(bills);
+    }
+     
+    $scope.currentBill = null;
+    
+    $scope.setCurrentBill = function(bill) {
+        $scope.currentBill = bill;
+        $("#suspendModal").modal("hide")
+    }
     
     $scope.createBill = function() {
-        $scope.current = {id: new Date().getTime(), items: [], total: 0};
+        $scope.currentBill = {id: new Date().getTime(), items: [], total: 0};
     }
     
     $scope.suspendBill = function() {
+        if($scope.currentBill) {
+	        $scope.bills.draft[$scope.currentBill.id] = $scope.currentBill;
+	        localStorage.setItem("bills", JSON.stringify($scope.bills));
+        }
     }
     
     $scope.cancelBill = function() {
+        if($scope.currentBill) {
+            if($scope.bills.draft[$scope.currentBill.id]){
+                delete $scope.bills.draft[$scope.currentBill.id]
+            }
+            $scope.bills.canceled[$scope.currentBill.id] = $scope.currentBill;
+            localStorage.setItem("bills", JSON.stringify($scope.bills));
+            $scope.currentBill =null ;
+        }
+    }
+    
+    $scope.printBill = function() {
+        if($scope.currentBill) {
+            $("#billDetails").print();
+	        $scope.bills.completed[$scope.currentBill.id] = $scope.currentBill;
+	        //TODO: need to send to server and remove from the completed queue
+	        //...
+	        localStorage.setItem("bills", JSON.stringify($scope.bills));
+	        $scope.currentBill = null;
+	    }
     }
     
     $scope.$on('handleBroadcast', function() {
@@ -62,13 +96,13 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
     });
     
     function addItem(product) {
-        if($scope.current) {
-            var item = {id: $scope.current.items.length + 1, quantity: 1};
+        if($scope.currentBill) {
+            var item = {id: $scope.currentBill.items.length + 1, quantity: 1};
             item.name = product.name;
             item.price = product.price;
             item.amount = item.quantity * item.price;
             
-            $scope.current.items.push(item);
+            $scope.currentBill.items.push(item);
             updateTotal();
         } else {
             alert("Please create Bill before selecting products");
@@ -82,73 +116,19 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
     
     function updateTotal() {
         var total = 0;
-        for(var i in $scope.current.items) {
-            total = total + $scope.current.items[i].amount; 
+        for(var i in $scope.currentBill.items) {
+            total = total + $scope.currentBill.items[i].amount; 
         }
         
-        $scope.current.total = total;
+        $scope.currentBill.total = total;
+    }
+    
+    $scope.getLength = function(obj) {
+        return _.size(obj)
+    }
+    
+    $scope.setSelectedReport = function(report) {
+        $scope.selectedReport = report;
+        $scope.currentBill = null;
     }
 });
-
-
-
-
-
-
-
-function Master() {
-
-    this.listProducts = function() {
-        var productData = localStorage.getItem("productList");
-        if(productData) {
-            this.productDict = JSON.parse(localStorage.getItem("productDict"))
-            $("#productList").select2({
-              placeholder: "select your product",
-              data: JSON.parse(productData),
-              results: function (data, page) {
-                console.info(data)
-                console.info(page)
-              }
-            });
-        } else {
-            $("#productList").val("click sync button to load products")
-        }
-    }
-    this.loadProducts = function() {
-        var curr = this;
-        $.ajax({
-		  url: "/product/list",
-		  dataType: "json",
-		  success: function(result) {
-		      localStorage.setItem("productDict", JSON.stringify(result));
-		      var productList = [];
-		      for(key in result){
-		          var product = result[key];
-		          productList.push({"id": product.id, "text": product.name})
-		      }
-		      localStorage.setItem("productList", JSON.stringify(productList));
-		      curr.listProducts();
-		  }
-		});    
-    }
-    
-}
-
-function Billing() {
-    this.totalPrice = 0;
-    
-    this.createBill = function(elem) {
-        var itemId = elem.value;
-        var productPrice = master.productDict[itemId].price;
-        this.totalPrice = this.totalPrice + parseFloat(productPrice);
-        $("#result").append(productPrice+" + ");
-        
-        $("#total").text(this.totalPrice);
-    }
-    
-    this.addItems = function(product) {
-    }
-    
-    this.calculateTotal = function() {
-    }
-}
