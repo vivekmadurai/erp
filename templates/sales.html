@@ -84,7 +84,7 @@
 				   
 				   
 				    <!-- Modal -->
-				   <div id="suspendModal"  class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				   <div id="suspendModal"  class="modal fade""  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					  <div class="modal-dialog">
 						<div class="modal-content">
 						  <div class="modal-header">
@@ -144,9 +144,10 @@
 							
 							
 							<tr ng-show="currentBill.items.length" >
-								<td colspan=2 align="center"><a href="#" class="btn btn-default btn-sm" ng-click="">Cancel</a></td>
-								<td colspan=2 align="center"><a href="#" class="btn btn-default btn-sm" ng-click="">Suspend This Bill</a></td>
-								<td colspan=2 align="center"><a href="#" class="btn btn-default btn-sm" ng-click="">View Suspended Bill</a></td>
+								<td colspan=2 align="center"><a href="#" class="btn btn-default btn-sm" ng-click="cancelBill()">Cancel</a></td>
+								<td colspan=2 align="center"><a href="#" class="btn btn-default btn-sm" ng-click="suspendBill()">Suspend This Bill</a></td>
+								<td colspan=2 align="center"><a href="#" class="btn btn-default btn-sm" data-toggle="modal"  data-target="#suspendModal">View Suspended Bill</a>
+								</td>
 							</tr>
 							
 

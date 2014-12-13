@@ -74,6 +74,7 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
     $scope.bills = {completed: {}, draft: {}, canceled: {}};
     var bills = localStorage.getItem("bills");
 	
+	
 	$scope.currentBill = {id: new Date().getTime(), items: [], total: 0,customerPaidAmt: 0, tenderAmt: 0};
 	
     if(bills){
@@ -105,8 +106,8 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
             }
             $scope.bills.canceled[$scope.currentBill.id] = $scope.currentBill;
             localStorage.setItem("bills", JSON.stringify($scope.bills));
-            $scope.currentBill =null ;
-        }
+			$scope.currentBill = {id: new Date().getTime(), items: [], total: 0,customerPaidAmt: 0, tenderAmt: 0};        
+		}
     }
     
     $scope.printBill = function() {
