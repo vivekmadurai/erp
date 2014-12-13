@@ -4,8 +4,7 @@ posApp.factory('sharedService', function($rootScope) {
     var sharedService = {};
     
     sharedService.selectedProduct = null;
-	
-	
+
     sharedService.prepForBroadcast = function(product) {
         this.selectedProduct = product;
         this.broadcastItem();
@@ -18,158 +17,138 @@ posApp.factory('sharedService', function($rootScope) {
     return sharedService;
 });
 
-posApp.controller('ProductController', function($rootScope, $http, sharedService) {
+posApp.controller('ProductController', function($scope, $http, sharedService) {
     var productData = localStorage.getItem("productList");
-	var categaryList = localStorage.getItem("categaryList");
-	
-   $rootScope.currentBill = {id: new Date().getTime(), items: [], total: 0,customerPaidAmt: 0, tenderAmt: 0};
-   $rootScope.currentBill.items
-	
-    $rootScope.val = "test";
+    $scope.val = "test";
     if (productData){
-        $rootScope.products = JSON.parse(productData);
+        $scope.products = JSON.parse(productData);
     } else {
          loadProducts();
-    }
-	
-	if (categaryList){
-        $rootScope.categaryList = JSON.parse(categaryList);
-    } else {
-         loadCategaryList();
     }
  
     function loadProducts() {
         $http.get("/product/list").success(function(result){
-            $rootScope.products = result;
+            $scope.products = result;
             localStorage.setItem("productList", JSON.stringify(result));
         }).error(function(){
             alert("Unable to load products")
         })
     }
     
-    $rootScope.handleClick = function(product) {
+    $scope.handleClick = function(product) {
         sharedService.prepForBroadcast(product);
     };
         
-    $rootScope.$on('handleBroadcast', function() {
-        $rootScope.message = sharedService.message;
+    $scope.$on('handleBroadcast', function() {
+        $scope.message = sharedService.message;
     }); 
 });
 
-
-posApp.controller('POSController', function($scope, $http, sharedService) {
-   
-     
-   $scope.updateTenderAmt = function(currentBill){
-   $scope.currentBill.tenderAmt = currentBill.customerPaidAmt - currentBill.total;
-   }
-	
-	
-});
-
-posApp.controller('BillController', function($rootScope, $http, sharedService) {
-    $rootScope.bills = {completed: {}, draft: {}, canceled: {}};
+posApp.controller('BillController', function($scope, $http, sharedService) {
+    $scope.bills = {completed: {}, draft: {}, canceled: {}};
     var bills = localStorage.getItem("bills");
+	
+	$scope.currentBill = {id: new Date().getTime(), items: [], total: 0,customerPaidAmt: 0, tenderAmt: 0};
+	
     if(bills){
-        $rootScope.bills = JSON.parse(bills);
-    }
-	
-	
-	$rootScope.currentBill = null;
-    
-    $rootScope.setCurrentBill = function(bill) {
-	
-        $rootScope.currentBill = bill;
-        //$("#suspendModal").modal("hide")
+        $scope.bills = JSON.parse(bills);
     }
      
+    //$scope.currentBill = null;
     
+    $scope.setCurrentBill = function(bill) {
+        $scope.currentBill = bill;
+        $("#suspendModal").modal("hide")
+    }
     
+    $scope.createBill = function() {
+        $scope.currentBill = {id: new Date().getTime(), items: [], total: 0};
+    }
     
-    $rootScope.suspendBill = function() {
-	alert($rootScope.currentBill);
-        if($rootScope.currentBill) {
-	        $rootScope.bills.draft[$rootScope.currentBill.id] = $rootScope.currentBill;
-	        localStorage.setItem("bills", JSON.stringify($rootScope.bills));
+    $scope.suspendBill = function() {
+        if($scope.currentBill) {
+	        $scope.bills.draft[$scope.currentBill.id] = $scope.currentBill;
+	        localStorage.setItem("bills", JSON.stringify($scope.bills));
         }
     }
     
-    $rootScope.cancelBill = function() {
-        if($rootScope.currentBill) {
-            if($rootScope.bills.draft[$rootScope.currentBill.id]){
-                delete $rootScope.bills.draft[$rootScope.currentBill.id]
+    $scope.cancelBill = function() {
+        if($scope.currentBill) {
+            if($scope.bills.draft[$scope.currentBill.id]){
+                delete $scope.bills.draft[$scope.currentBill.id]
             }
-            $rootScope.bills.canceled[$rootScope.currentBill.id] = $rootScope.currentBill;
-            localStorage.setItem("bills", JSON.stringify($rootScope.bills));
-            $rootScope.currentBill =null ;
+            $scope.bills.canceled[$scope.currentBill.id] = $scope.currentBill;
+            localStorage.setItem("bills", JSON.stringify($scope.bills));
+            $scope.currentBill =null ;
         }
     }
     
-    $rootScope.printBill = function() {
-	
-        if($rootScope.currentBill) {
-		
-		alert($rootScope.currentBill);
-            var billDetails = $("#billDetails");
-			
-				
-
-			
+    $scope.printBill = function() {
+        if($scope.currentBill) {
+            var billDetails = $("#billDetails")
             setTimeout(function(){billDetails.print()}, 500);
-            if($rootScope.bills.draft[$rootScope.currentBill.id]){
-                delete $rootScope.bills.draft[$rootScope.currentBill.id]
+            if($scope.bills.draft[$scope.currentBill.id]){
+                delete $scope.bills.draft[$scope.currentBill.id]
             }
-	        $rootScope.bills.completed[$rootScope.currentBill.id] = $rootScope.currentBill;
+	        $scope.bills.completed[$scope.currentBill.id] = $scope.currentBill;
 	        //TODO: need to send to server and remove from the completed queue
 	        //...
-	        localStorage.setItem("bills", JSON.stringify($rootScope.bills));
-	        //$rootScope.currentBill = null;
+	        localStorage.setItem("bills", JSON.stringify($scope.bills));
+	        //$scope.currentBill = null;
 	    }
     }
     
-    $rootScope.$on('handleBroadcast', function() {
+    $scope.$on('handleBroadcast', function() {
         addItem(sharedService.selectedProduct);
     });
     
     function addItem(product) {
-        if($rootScope.currentBill) 
-		{
-            var item = {id: $rootScope.currentBill.items.length + 1, quantity: 1};
+        if($scope.currentBill) {
+            var item = {id: $scope.currentBill.items.length + 1, quantity: 1};
             item.name = product.name;
             item.price = product.price;
             item.amount = item.quantity * item.price;
             
-            $rootScope.currentBill.items.unshift(item);
+            $scope.currentBill.items.push(item);
             updateTotal();
         } else {
             alert("Please create Bill before selecting products");
         }
     }
     
-    $rootScope.updateItem = function(item){
+    $scope.updateItem = function(item){
         item.amount = item.quantity * item.price;
         updateTotal();
     }
     
     function updateTotal() {
         var total = 0;
-        for(var i in $rootScope.currentBill.items) {
-            total = total + $rootScope.currentBill.items[i].amount; 
+        for(var i in $scope.currentBill.items) {
+            total = total + $scope.currentBill.items[i].amount; 
         }
         
-        $rootScope.currentBill.total = total;
-		
-		$rootScope.currentBill.customerPaidAmt = total;
-		
-		
+        $scope.currentBill.total = total;
+		$scope.currentBill.customerPaidAmt = total;
     }
     
-    $rootScope.getLength = function(obj) {
+    $scope.getLength = function(obj) {
         return _.size(obj)
     }
     
-    $rootScope.setSelectedReport = function(report) {
-        $rootScope.selectedReport = report;
-        $rootScope.currentBill = null;
+    $scope.setSelectedReport = function(report) {
+        $scope.selectedReport = report;
+        $scope.currentBill = null;
     }
+});
+
+posApp.controller('CategaryController', function($scope, $http, sharedService) {
+
+var categaryList = localStorage.getItem("categaryList");
+	
+	if (categaryList){
+        $scope.categaryList = JSON.parse(categaryList);
+    } else {
+         loadCategaryList();
+    }
+
 });

@@ -56,8 +56,9 @@
  <div class="container" ng-app="POSApp" >
 
     <div class="row" ng-controller="BillController">
-		<div class="col-md-4 menu-category list-group pre-scrollable">
+		<div class="col-md-4 menu-category list-group ">
 
+				<div class="pre-scrollable bill-scrolable-height">
 					<table id="billDetails" class="table">
 						<tr class="colorstrip">
 							<th>Particulars</th>
@@ -79,6 +80,7 @@
 						  
 				  
 				   </table>
+				   </div>
 				   
 				   
 				    <!-- Modal -->
@@ -107,48 +109,11 @@
 						</div>
 					  </div>
 				   </div>
-				 
-				</div>
-				
-
-        <div class="col-md-8 wrapper" ng-controller="ProductController">
-		
-			<div class="right-inner-addon">
-				<div class="form-group has-feedback">
-					<i class="form-control-feedback glyphicon glyphicon-search"></i>
-                    <input type="search" class="form-control" placeholder="Search Product by start typing or scanning" ng-model="searchText"/>
-     			</div>
-				
-              </div>
-		
-		
-
-			<div class="pre-scrollable" >
-	        <div class="colorstrip">Select Product</div>
-				<ul  class="nav nav-pills">
-					<li style="width: 170px; height: 74px;" class="active" 
-					ng-repeat="product in products | filter:searchText"
-					ng-click="handleClick(product)"><a  href="#tab1" >
-					<span class="prdDisplayBoxName">{{ product.name | uppercase }}</span>  
-					<span class="prdDisplayBoxPrice">Rs. {{ product.price }}</span>
-					
-					</a>
-					
-					 </li>
-				</ul>
-				
-				
-				</a>
-	          </div>
-		</div>
-		
-	
-	<div  class="row" ng-controller="POSController">
-	
-        <div class="col-md-4">
-
-		
-						  <table ng-show="currentBill.items.length" class="table" align=right>
+				   
+				   
+				   <!-- Bill Controls -->
+				   <div>
+				    <table ng-show="currentBill.items.length"  class="table billControls">
 							  <tr >
 								  <td style="text-align: right;">SubTotal:</td>
 								  <td>{{ currentBill.total }}</td>
@@ -176,12 +141,7 @@
 								<td colspan=6 align="center">Tender {{ currentBill.customerPaidAmt  - currentBill.total}} to customer</td>
 							</tr>
 							
-							<tr ng-show="currentBill.items.length" >
-								<td colspan=2 align="center"><a href="#" class="btn-sm" ng-click="">Cancel</a></td>
-								<td colspan=2 align="center"><a href="#" class="btn-sm" ng-click="">Suspend This Bill</a></td>
-								<td colspan=2 align="center"><a href="#" class="btn-sm" ng-click="">View Suspended Bill</a></td>
-							</tr>
-							
+												
 							
 							<tr ng-show="currentBill.items.length" >
 								<td colspan=2 align="center"><a href="#" class="btn btn-default btn-sm" ng-click="">Cancel</a></td>
@@ -191,20 +151,52 @@
 							
 
 						   </table>
-						
-			</div>
+				   </div>
+				 
+				</div>
+				
+
+        <div class="col-md-8 wrapper" ng-controller="ProductController">
+		<div class="has-feedback right-inner-addon "> 
+						 <i class="form-control-feedback glyphicon glyphicon-search"></i>
+						<input type="search" class="form-control" placeholder="Search Product by start typing or scanning" ng-model="searchText"/>
+					 
+					
+				</div>
 			
+			<div class="pre-scrollable" class="table">
+				
+			
+     			
+			
+				<ul  class="nav nav-pills">
+					<li style="width: 170px; height: 74px;" class="active" 
+					ng-repeat="product in products | filter:searchText"
+					ng-click="handleClick(product)"><a  href="#tab1" >
+					<span class="prdDisplayBoxName">{{ product.name | uppercase }}</span>  
+					<span class="prdDisplayBoxPrice">Rs. {{ product.price }}</span>
+					
+					</a>
+					
+					 </li>
+				</ul>
+				
+				
+				</a>
+	          </div>
 		
-       <div class="col-md-8">
+		
+		<div ng-controller="CategaryController">
+			
+	    <div class="has-feedback right-inner-addon"> 
+						 <i class="form-control-feedback glyphicon glyphicon-search"></i>
+						<input type="search" class="form-control" placeholder="Search Categary by start typing or scanning" ng-model="searchCategaryText"/>
+					   </div>
 
-	   
-
-	       <div class="scrollable categaryDiv">
-		   <div class="colorstrip">Select Category</div>
-
-					<ul  class="nav nav-pills">
+	       <div class="pre-scrollable">
+		   		<ul  class="nav nav-pills">
 							<li style="width: 170px; height: 74px;" class="active" 
-							ng-repeat="categary in categaryList"  
+							ng-repeat="categary in categaryList | filter:searchCategaryText"  
 							><a  href="#tab1" >
 							<span class="prdDisplayBoxName">{{ categary.name | uppercase }}</span>  
 							
@@ -214,11 +206,12 @@
 						</ul>
 				</div>
 			
+		   </div>
+		
 		</div>
 		
-      
 	
-	</div>
+	
 </div>
 
 <!-- Bootstrap core JavaScript

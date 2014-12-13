@@ -31,22 +31,29 @@ border-style: groove;
     border-radius:0px;
 }
 
-.categaryDiv{
-margin-left: 7px;
-margin-right: 18px;
-}
 
 .billTable{
 border-color: orange !important;
 }
 
+.bill-scrolable-height{
+min-height:290px;
+}
 
+.pre-scrollable {
+max-height: 290px !important;
+
+}
+
+.billControls{
+max-width: inherit;
+}
 
 .colorstrip{
     width: 100%; height: 30px;
-    border-style: groove;
-    border-color: white;
-    background-color: orange;
+    
+    border-color: #46b8da;
+    background-color: #5bc0de;
 	color: white;
 	margin-top: 7px;
 	font-size: 17px;
