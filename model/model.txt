@@ -1,0 +1,94 @@
+Category:
+Name*
+Parent Category
+No(not needed)
+
+Product:
+Name*
+Description
+EAN13*
+Category
+Type(not needed, stock,service,consumable)
+Buying Price*
+Selling Price*
+Vendor(not needed, supplier)
+Discount(percentage)
+Discount Valid From
+Discount Valid To
+Icon(binary)
+Quantity*
+Reorder Level(default 1)
+Location
+Sales Tax1(not needed, VAT)
+Service Tax2(not needed)
+Weight(not needed)
+
+Vendor:
+?
+
+Customer:
+First Name*
+Last Name
+Email
+Phone Number
+Address1
+Address2(not needed)
+City
+State
+Country
+Zip
+Comment(not needed)
+Account(not needed)
+Taxable(not needed)
+Discount
+
+Company:
+?
+
+Store:
+Store Id
+Store Name*
+Branch Name
+Store Address
+Phone Number
+Tax1(VAT)(Value %)
+Tax2(Service Tax)(Value %)
+Currency(Rs/$)
+Email(Admin)
+WebSite(not needed)
+Language(not needed)
+Direct to Print
+
+StoreSubscription:
+Store
+User
+
+User:
+Same as customer,
+Company*
+UserName(Same as Email)*
+Password*
+Salary
+Id Proof
+Role(Admin, User, Manager) Add/Delete(Customer, Product, Reports, Sales(POS), Receiving, Employee, Gift Card, Store Config)
+
+Bill:
+Id
+User*
+Customer
+Bill Date
+Payment Type
+Amount Received
+Comment
+Tax1
+Tax2
+Total
+
+BillItem:
+Bill
+Product
+Category
+Price
+Quantity
+Discount
+Amount
