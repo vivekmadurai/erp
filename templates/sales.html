@@ -59,7 +59,7 @@
 		<div class="col-md-4 menu-category list-group ">
 
 				<div class="pre-scrollable bill-scrolable-height">
-					<table id="billDetails" class="table">
+					<table id="billDetails" class="table table-hover table-condensed">
 						<tr class="colorstrip">
 							<th>Particulars</th>
 							<th>Quantity</th>
@@ -113,14 +113,15 @@
 				   
 				   <!-- Bill Controls -->
 				   <div>
-				    <table ng-show="currentBill.items.length"  class="table billControls">
+				    <table ng-show="currentBill.items.length"  class="table  table-hover table-condensed billControls">
+					<tr><td colspan=6>&nbsp;</td></tr>
 							  <tr >
 								  <td style="text-align: right;">SubTotal:</td>
 								  <td>{{ currentBill.total }}</td>
 							    <td  style="text-align: right;">Tax:</td>
 								  <td>0</td>
 							    <td style="text-align: right;"><b>Total:</b></td>
-								  <td>{{ currentBill.total }}</td>
+								  <td><b>{{ currentBill.total }}</b></td>
 							  </tr>
 							  
 							  <tr>							
@@ -129,19 +130,18 @@
 							</tr>
 							  
 							  <tr ng-show="currentBill.items.length" >
-								<td colspan=4 align="right"><select>
+								<td colspan=6 align="center"><select>
 										  <option value="volvo">Cash</option>
 										  <option value="saab">Card</option>
 										  <option value="mercedes">Tokens</option>
 										  <option value="audi">Cheque</option>
-										</select> Paid by customer:</td>
-								<td colspan=2 align="right"><input type="text" value='{{ currentBill.customerPaidAmt }}' style='width:60px' ng-blur="updateTenderAmt(currentBill)" ng-model='currentBill.customerPaidAmt' /></td>
+										</select> Paid by customer:
+								<input type="text" value='{{ currentBill.customerPaidAmt }}' style='width:60px' ng-blur="updateTenderAmt(currentBill)" ng-model='currentBill.customerPaidAmt' /></td>
 							</tr>
 							<tr ng-show="currentBill.items.length" >
 								<td colspan=6 align="center">Tender {{ currentBill.customerPaidAmt  - currentBill.total}} to customer</td>
 							</tr>
 							
-												
 							
 							<tr ng-show="currentBill.items.length" >
 								<td colspan=2 align="center"><a href="#" class="btn btn-default btn-sm" ng-click="">Cancel</a></td>
@@ -164,14 +164,14 @@
 					
 				</div>
 			
-			<div class="pre-scrollable" class="table">
+			<div class="pre-scrollable bill-scrolable-height">
 				
 			
      			
 			
 				<ul  class="nav nav-pills">
 					<li style="width: 170px; height: 74px;" class="active" 
-					ng-repeat="product in products | filter:searchText"
+					ng-repeat="product in selectedProductCategary | filter:searchText | filter:{name: selectedCategory.name}"
 					ng-click="handleClick(product)"><a  href="#tab1" >
 					<span class="prdDisplayBoxName">{{ product.name | uppercase }}</span>  
 					<span class="prdDisplayBoxPrice">Rs. {{ product.price }}</span>
@@ -186,19 +186,19 @@
 	          </div>
 		
 		
-		<div ng-controller="CategaryController">
+		<div ng-controller="CategoryController">
 			
 	    <div class="has-feedback right-inner-addon"> 
 						 <i class="form-control-feedback glyphicon glyphicon-search"></i>
-						<input type="search" class="form-control" placeholder="Search Categary by start typing or scanning" ng-model="searchCategaryText"/>
+						<input type="search" class="form-control" placeholder="Search Category by start typing or scanning" ng-model="searchCategoryText"/>
 					   </div>
 
-	       <div class="pre-scrollable">
+	       <div class="pre-scrollable ">
 		   		<ul  class="nav nav-pills">
 							<li style="width: 170px; height: 74px;" class="active" 
-							ng-repeat="categary in categaryList | filter:searchCategaryText"  
+							ng-repeat="category in categoryList | filter:searchCategoryText"  ng-click="displayProductsForCategory(category)"
 							><a  href="#tab1" >
-							<span class="prdDisplayBoxName">{{ categary.name | uppercase }}</span>  
+							<span class="prdDisplayBoxName">{{ category.name | uppercase }}</span>  
 							
 							</a>
 							

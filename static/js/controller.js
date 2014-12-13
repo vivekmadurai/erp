@@ -4,20 +4,31 @@ posApp.factory('sharedService', function($rootScope) {
     var sharedService = {};
     
     sharedService.selectedProduct = null;
+	sharedService.selectedCategory = null;
 
     sharedService.prepForBroadcast = function(product) {
         this.selectedProduct = product;
         this.broadcastItem();
     };
+	
+	
+	sharedService.prepForBroadcastCategory = function(category) {
+	    this.selectedCategory = category;
+		this.broadcastCategory();
+    };
 
     sharedService.broadcastItem = function() {
         $rootScope.$broadcast('handleBroadcast');
+    };
+	
+	sharedService.broadcastCategory = function() {
+        $rootScope.$broadcast('handleBroadcastCategory');
     };
 
     return sharedService;
 });
 
-posApp.controller('ProductController', function($scope, $http, sharedService) {
+posApp.controller('ProductController', function($scope, $http, sharedService, $filter) {
     var productData = localStorage.getItem("productList");
     $scope.val = "test";
     if (productData){
@@ -25,6 +36,11 @@ posApp.controller('ProductController', function($scope, $http, sharedService) {
     } else {
          loadProducts();
     }
+	
+	if(typeof($scope.selectedProductCategary) == "undefined"){
+	
+	$scope.selectedProductCategary  = $filter('filter')($scope.products, { categoryId: 1 });
+	}
  
     function loadProducts() {
         $http.get("/product/list").success(function(result){
@@ -34,14 +50,24 @@ posApp.controller('ProductController', function($scope, $http, sharedService) {
             alert("Unable to load products")
         })
     }
-    
+	
+	
     $scope.handleClick = function(product) {
-        sharedService.prepForBroadcast(product);
+	    sharedService.prepForBroadcast(product);
     };
         
     $scope.$on('handleBroadcast', function() {
         $scope.message = sharedService.message;
     }); 
+	
+	
+	$scope.$on('handleBroadcastCategory', function() {	
+	
+		$scope.selectedProductCategary  = $filter('filter')($scope.products, { categoryId: sharedService.selectedCategory.id });
+		
+    });
+	
+	
 });
 
 posApp.controller('BillController', function($scope, $http, sharedService) {
@@ -99,6 +125,7 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
     }
     
     $scope.$on('handleBroadcast', function() {
+	
         addItem(sharedService.selectedProduct);
     });
     
@@ -109,7 +136,7 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
             item.price = product.price;
             item.amount = item.quantity * item.price;
             
-            $scope.currentBill.items.push(item);
+            $scope.currentBill.items.unshift(item);
             updateTotal();
         } else {
             alert("Please create Bill before selecting products");
@@ -141,14 +168,21 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
     }
 });
 
-posApp.controller('CategaryController', function($scope, $http, sharedService) {
+posApp.controller('CategoryController', function($scope, $http, sharedService) {
 
-var categaryList = localStorage.getItem("categaryList");
+var categoryList = localStorage.getItem("categoryList");
 	
-	if (categaryList){
-        $scope.categaryList = JSON.parse(categaryList);
+	if (categoryList){
+        $scope.categoryList = JSON.parse(categoryList);
     } else {
-         loadCategaryList();
+         loadCategoryList();
     }
+	
+	 $scope.displayProductsForCategory = function(category) {
+       sharedService.prepForBroadcastCategory(category);
+	   
+    };
+	
+	
 
 });
