@@ -3,26 +3,15 @@ var posApp = angular.module('POSApp',[]);
 posApp.factory('sharedService', function($rootScope) {
     var sharedService = {};
     
-    sharedService.selectedProduct = null;
-	sharedService.selectedCategory = null;
+	sharedService.resource = {"product": null, "category": null};
 
-    sharedService.prepForBroadcast = function(product) {
-        this.selectedProduct = product;
-        this.broadcastItem();
-    };
-	
-	
-	sharedService.prepForBroadcastCategory = function(category) {
-	    this.selectedCategory = category;
-		this.broadcastCategory();
+    sharedService.prepForBroadcast = function(name, value) {
+        this.resource[name] = value;
+        this.broadcastItem(name);
     };
 
-    sharedService.broadcastItem = function() {
-        $rootScope.$broadcast('handleBroadcast');
-    };
-	
-	sharedService.broadcastCategory = function() {
-        $rootScope.$broadcast('handleBroadcastCategory');
+    sharedService.broadcastItem = function(name) {
+        $rootScope.$broadcast('handleBroadcast', {name: name});
     };
 
     return sharedService;
@@ -51,23 +40,15 @@ posApp.controller('ProductController', function($scope, $http, sharedService, $f
         })
     }
 	
-	
     $scope.handleClick = function(product) {
-	    sharedService.prepForBroadcast(product);
+	    sharedService.prepForBroadcast("product", product);
     };
         
-    $scope.$on('handleBroadcast', function() {
-        $scope.message = sharedService.message;
-    }); 
-	
-	
-	$scope.$on('handleBroadcastCategory', function() {	
-	
-		$scope.selectedProductCategary  = $filter('filter')($scope.products, { categoryId: sharedService.selectedCategory.id });
-		
-    });
-	
-	
+    $scope.$on('handleBroadcast', function(event, args) {
+		if(args.name == "category"){
+			$scope.selectedProductCategary  = $filter('filter')($scope.products, { categoryId: sharedService.resource.category.id });
+		}
+	}); 
 });
 
 posApp.controller('BillController', function($scope, $http, sharedService) {
@@ -125,9 +106,10 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
 	    }
     }
     
-    $scope.$on('handleBroadcast', function() {
-	
-        addItem(sharedService.selectedProduct);
+    $scope.$on('handleBroadcast', function(event, args) {
+        if(args.name == "product") {
+            addItem(sharedService.resource.product);
+        }
     });
     
     function addItem(product) {
@@ -179,11 +161,7 @@ var categoryList = localStorage.getItem("categoryList");
          loadCategoryList();
     }
 	
-	 $scope.displayProductsForCategory = function(category) {
-       sharedService.prepForBroadcastCategory(category);
-	   
+	$scope.displayProductsForCategory = function(category) {
+        sharedService.prepForBroadcast("category", category);	   
     };
-	
-	
-
 });
