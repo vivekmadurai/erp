@@ -20,7 +20,10 @@ class BaseHandler(webapp2.RequestHandler):
         
     def render_report(self):
         self.response.out.write(renderTemplate('report.html', {"user": self.user}))
-        
+    
+    def render_sales(self):
+        self.response.out.write(renderTemplate('sales.html', {"user": self.user}))
+    
     def get_list(self, modelName):
         from model.products import productList
         self.response.write(json.dumps(productList))
