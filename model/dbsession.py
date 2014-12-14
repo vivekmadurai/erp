@@ -15,8 +15,9 @@ class DBSession:
 
     def create(self, modelClass, args):
         logging.info("creating new record for %s"%(modelClass.__name__))
-        instance = modelClass()
-        instance.instanceId = args.get("instanceId") or generateUUID()
+        instanceId = args.get("instanceId") or generateUUID()
+        instance = modelClass(id = instanceId)
+        instance.instanceId = instanceId
         for name in args:
             instance._values[name] = args.get(name)
             
@@ -48,11 +49,12 @@ class DBSession:
             logging.info("Deleting %s record"%(len(self.deleteList)))
             ndb.delete_multi(self.deleteList)
             
-        
-            
     def get(self, modelClass, instanceId):
-        result = modelClass.query(modelClass.instanceId==instanceId).get()
-        return result
+        result = ndb.Key(modelClass, instanceId).get()
+        #result = modelClass.query(modelClass.instanceId==instanceId).get()
+        if result:
+            return result
+        raise Exception("Unable to retrive the record with id %s for the model %s"%(instanceId, modelClass.__name__))
 
     def query(self, modelClass, filterArgs, limit=1000, offset=0):
         query = modelClass.query()
