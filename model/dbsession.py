@@ -54,7 +54,7 @@ class DBSession:
         #result = modelClass.query(modelClass.instanceId==instanceId).get()
         if result:
             return result
-        raise Exception("Unable to retrive the record with id %s for the model %s"%(instanceId, modelClass.__name__))
+        raise Exception("Unable to retrieve the record with id %s for the model %s"%(instanceId, modelClass.__name__))
 
     def query(self, modelClass, filterArgs, limit=1000, offset=0):
         query = modelClass.query()
