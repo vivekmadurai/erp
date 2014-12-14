@@ -3,21 +3,21 @@ var posApp = angular.module('POSApp',[]);
 posApp.factory('sharedService', function($rootScope) {
     var sharedService = {};
     
-    sharedService.selectedProduct = null;
+	sharedService.resource = {"product": null, "category": null};
 
-    sharedService.prepForBroadcast = function(product) {
-        this.selectedProduct = product;
-        this.broadcastItem();
+    sharedService.prepForBroadcast = function(name, value) {
+        this.resource[name] = value;
+        this.broadcastItem(name);
     };
 
-    sharedService.broadcastItem = function() {
-        $rootScope.$broadcast('handleBroadcast');
+    sharedService.broadcastItem = function(name) {
+        $rootScope.$broadcast('handleBroadcast', {name: name});
     };
 
     return sharedService;
 });
 
-posApp.controller('ProductController', function($scope, $http, sharedService) {
+posApp.controller('ProductController', function($scope, $http, sharedService, $filter) {
     var productData = localStorage.getItem("productList");
     $scope.val = "test";
     if (productData){
@@ -25,6 +25,11 @@ posApp.controller('ProductController', function($scope, $http, sharedService) {
     } else {
          loadProducts();
     }
+	
+	if(typeof($scope.selectedProductCategary) == "undefined"){
+	
+	$scope.selectedProductCategary  = $filter('filter')($scope.products, { categoryId: 1 });
+	}
  
     function loadProducts() {
         $http.get("/product/list").success(function(result){
@@ -34,24 +39,30 @@ posApp.controller('ProductController', function($scope, $http, sharedService) {
             alert("Unable to load products")
         })
     }
-    
+	
     $scope.handleClick = function(product) {
-        sharedService.prepForBroadcast(product);
+	    sharedService.prepForBroadcast("product", product);
     };
         
-    $scope.$on('handleBroadcast', function() {
-        $scope.message = sharedService.message;
-    }); 
+    $scope.$on('handleBroadcast', function(event, args) {
+		if(args.name == "category"){
+			$scope.selectedProductCategary  = $filter('filter')($scope.products, { categoryId: sharedService.resource.category.id });
+		}
+	}); 
 });
 
 posApp.controller('BillController', function($scope, $http, sharedService) {
     $scope.bills = {completed: {}, draft: {}, canceled: {}};
     var bills = localStorage.getItem("bills");
+	
+	
+	$scope.currentBill = {id: new Date().getTime(), items: [], total: 0,customerPaidAmt: 0, tenderAmt: 0};
+	
     if(bills){
         $scope.bills = JSON.parse(bills);
     }
      
-    $scope.currentBill = null;
+    //$scope.currentBill = null;
     
     $scope.setCurrentBill = function(bill) {
         $scope.currentBill = bill;
@@ -76,8 +87,8 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
             }
             $scope.bills.canceled[$scope.currentBill.id] = $scope.currentBill;
             localStorage.setItem("bills", JSON.stringify($scope.bills));
-            $scope.currentBill =null ;
-        }
+			$scope.currentBill = {id: new Date().getTime(), items: [], total: 0,customerPaidAmt: 0, tenderAmt: 0};        
+		}
     }
     
     $scope.printBill = function() {
@@ -95,8 +106,10 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
 	    }
     }
     
-    $scope.$on('handleBroadcast', function() {
-        addItem(sharedService.selectedProduct);
+    $scope.$on('handleBroadcast', function(event, args) {
+        if(args.name == "product") {
+            addItem(sharedService.resource.product);
+        }
     });
     
     function addItem(product) {
@@ -106,7 +119,7 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
             item.price = product.price;
             item.amount = item.quantity * item.price;
             
-            $scope.currentBill.items.push(item);
+            $scope.currentBill.items.unshift(item);
             updateTotal();
         } else {
             alert("Please create Bill before selecting products");
@@ -125,6 +138,7 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
         }
         
         $scope.currentBill.total = total;
+		$scope.currentBill.customerPaidAmt = total;
     }
     
     $scope.getLength = function(obj) {
@@ -135,4 +149,19 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
         $scope.selectedReport = report;
         $scope.currentBill = null;
     }
+});
+
+posApp.controller('CategoryController', function($scope, $http, sharedService) {
+
+var categoryList = localStorage.getItem("categoryList");
+	
+	if (categoryList){
+        $scope.categoryList = JSON.parse(categoryList);
+    } else {
+         loadCategoryList();
+    }
+	
+	$scope.displayProductsForCategory = function(category) {
+        sharedService.prepForBroadcast("category", category);	   
+    };
 });

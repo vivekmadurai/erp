@@ -11,88 +11,214 @@
     <!-- Bootstrap core CSS -->
     <link href="../static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link href="../static/css/custom.css" rel="stylesheet">
-
-  </head>
- <div class="Override">
-
-    <div class="row">
-		<div class="col-md-4 menu-category list-group pre-scrollable">
-				<div class="menu-category-name list-group-item active">Category</div>
-				<a href="#" class="menu-item list-group-item">Lorem ipsum.<span class="badge">€ 0.00</span></a>
-				<a href="#" class="menu-item list-group-item">Lorem ipsum.<span class="badge">€ 0.00</span></a>
-				<a href="#" class="menu-item list-group-item">Lorem ipsum.<span class="badge">€ 0.00</span></a>
-				<a href="#" class="menu-item list-group-item">Lorem ipsum.<span class="badge">€ 0.00</span></a>
-				<a href="#" class="menu-item list-group-item">Lorem ipsum.<span class="badge">€ 0.00</span></a>
-				<a href="#" class="menu-item list-group-item">Lorem ipsum.<span class="badge">€ 0.00</span></a>
-				<a href="#" class="menu-item list-group-item">Lorem ipsum.<span class="badge">€ 0.00</span></a>
-				<a href="#" class="menu-item list-group-item">Lorem ipsum.<span class="badge">€ 0.00</span></a>
-				</div>
-        <div class="col-md-8 wrapper ">
-			<div class="col-md-2">Product 1</div>
-			<div class="col-md-2">Product 1</div>
-			<div class="col-md-2">Product 1</div>
-			<div class="col-md-2">Product 1</div>
-			<div class="col-md-2">Product 1</div>
-			<div class="col-md-2">Product 1</div>
-			<div class="col-md-2">Product 1</div>
-			<div class="col-md-2">Product 1</div>
-			<div class="col-md-2">Product 1</div>
-			<div class="col-md-2">Product 1</div>
-		</div>
-		
-    </div>
+    
+    <script src="../static/lib/underscore.min.js"></script>
+    <script src="../static/lib/angular/angular.min.js"></script>
+    
+    <script src="../static/js/controller.js"></script>
 	
-	<div  class="row">
-        <div class="col-md-1">
+  </head>
 
-			
-				<p>Suspend</p><p>Cancel</p><p>Buttons</p>
-			</div>
-			<div class="col-md-3">
+ <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse " role="navigation">
+       <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">POS</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/home">Home</a></li>
+            <li><a href="/report">Report</a></li>
+            <li><a href="#inventory">Inventory</a></li>
+            <li><a href="#user">User</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Welcome, {{ user.nickname() }} <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">My Account</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="/logout">logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav> 
+ 
+ {% raw %}
+ <div class="container" ng-app="POSApp" >
 
-				  <div class="num">
-					<button class="numButton number-char">1</button>
-					<button class="numButton number-char">2</button>
-					<button class="numButton number-char">3</button>
-					<button class="numButton selected-mode" data-mode="quantity">Qty</button>
-					<br>
-					<button class="numButton number-char">4</button>
-					<button class="numButton number-char">5</button>
-					<button class="numButton number-char">6</button>
-					<button class="numButton" data-mode="discount">Disc</button>
-					<br>
-					<button class="numButton number-char">7</button>
-					<button class="numButton number-char">8</button>
-					<button class="numButton number-char">9</button>
-					<button class="numButton" data-mode="price">Price</button>
-					<br>
-					<button class="numButton numpad-minus">+/-</button>
-					<button class="numButton number-char">0</button>
-					<button class="numButton number-char">.</button>
-					<button class="numButton numpad-backspace">
-						<img height="21" src="../static/css/backspace.png" width="24">
-					</button>
-					<br>
+    <div class="row" ng-controller="BillController">
+		<div class="col-md-4 menu-category list-group ">
+
+				<div class="pre-scrollable bill-scrolable-height">
+					<table id="billDetails" class="table table-hover table-condensed">
+						<tr class="colorstrip">
+							<th>Particulars</th>
+							<th>Quantity</th>
+							<th>Price</th>
+							<th>Amount</th>
+							<tr ng-if="currentBill.items.length == 0">
+							   <td colspan=4>Please select to product to sell</td>
+						</tr>
+
+	              </tr>
+						 <tr ng-repeat="item in currentBill.items">
+							<td>{{ item.name }}</td>
+							<td><input type="text" value="{{ item.quantity }}" style="width:60px" ng-model="item.quantity" ng-blur="updateItem(item)"></input></td>
+							<td>{{ item.price }}</td>
+							<td align='right'>{{item.amount }}</td>
+						  </tr>
+						  
+						  
+				  
+				   </table>
+				   </div>
+				   
+				   
+				    <!-- Modal -->
+				   <div id="suspendModal"  class="modal fade""  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					  <div class="modal-dialog">
+						<div class="modal-content">
+						  <div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title" id="myModalLabel">Suspended Bill</h4>
+						  </div>
+						  <div class="modal-body">
+							<table class="table">
+								  <tr>
+									<th>#</th>
+									<th></th>
+								  </tr>
+								  <tr ng-repeat="bill in bills.draft">
+									<td>{{ bill.id }}</td>
+									<td> <a href="#" class="btn btn-default btn-sm" ng-click="setCurrentBill(bill)">View</a></td>
+								  </tr>
+							  </table>
+						  </div>
+						  <div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						  </div>
+						</div>
+					  </div>
+				   </div>
+				   
+				   
+				   <!-- Bill Controls -->
+				   <div>
+				    <table ng-show="currentBill.items.length"  class="table  table-hover table-condensed billControls">
+					<tr><td colspan=6>&nbsp;</td></tr>
+							  <tr >
+								  <td style="text-align: right;">SubTotal:</td>
+								  <td>{{ currentBill.total }}</td>
+							    <td  style="text-align: right;">Tax:</td>
+								  <td>0</td>
+							    <td style="text-align: right;"><b>Total:</b></td>
+								  <td><b>{{ currentBill.total }}</b></td>
+							  </tr>
+							  
+							  <tr>							
+							
+							   <td colspan="6" align=center><a href="#" class="btn btn-info  btn-lg" ng-click="printBill()">Complete Sale</a></td>
+							</tr>
+							  
+							  <tr ng-show="currentBill.items.length" >
+								<td colspan=6 align="center"><select>
+										  <option value="volvo">Cash</option>
+										  <option value="saab">Card</option>
+										  <option value="mercedes">Tokens</option>
+										  <option value="audi">Cheque</option>
+										</select> Paid by customer:
+								<input type="text" value='{{ currentBill.customerPaidAmt }}' style='width:60px' ng-blur="updateTenderAmt(currentBill)" ng-model='currentBill.customerPaidAmt' /></td>
+							</tr>
+							<tr ng-show="currentBill.items.length" >
+								<td colspan=6 align="center">Tender {{ currentBill.customerPaidAmt  - currentBill.total}} to customer</td>
+							</tr>
+							
+							
+							<tr ng-show="currentBill.items.length" >
+								<td colspan=2 align="center"><a href="#" class="btn btn-default btn-sm" ng-click="cancelBill()">Cancel</a></td>
+								<td colspan=2 align="center"><a href="#" class="btn btn-default btn-sm" ng-click="suspendBill()">Suspend This Bill</a></td>
+								<td colspan=2 align="center"><a href="#" class="btn btn-default btn-sm" data-toggle="modal"  data-target="#suspendModal">View Suspended Bill</a>
+								</td>
+							</tr>
+							
+
+						   </table>
+				   </div>
+				 
 				</div>
 				
+
+        <div class="col-md-8 wrapper" ng-controller="ProductController">
+		<div class="has-feedback right-inner-addon "> 
+						 <i class="form-control-feedback glyphicon glyphicon-search"></i>
+						<input type="search" class="form-control" placeholder="Search Product by start typing or scanning" ng-model="searchText"/>
+					 
+					
+				</div>
 			
+			<div class="pre-scrollable bill-scrolable-height">
+				
+			
+     			
+			
+				<ul  class="nav nav-pills">
+					<li style="width: 170px; height: 74px;" class="active" 
+					ng-repeat="product in selectedProductCategary | filter:searchText | filter:{name: selectedCategory.name}"
+					ng-click="handleClick(product)"><a  href="#tab1" >
+					<span class="prdDisplayBoxName">{{ product.name | uppercase }}</span>  
+					<span class="prdDisplayBoxPrice">Rs. {{ product.price }}</span>
+					
+					</a>
+					
+					 </li>
+				</ul>
+				
+				
+				</a>
+	          </div>
+		
+		
+		<div ng-controller="CategoryController">
+			
+	    <div class="has-feedback right-inner-addon"> 
+						 <i class="form-control-feedback glyphicon glyphicon-search"></i>
+						<input type="search" class="form-control" placeholder="Search Category by start typing or scanning" ng-model="searchCategoryText"/>
+					   </div>
+
+	       <div class="pre-scrollable ">
+		   		<ul  class="nav nav-pills">
+							<li style="width: 170px; height: 74px;" class="active" 
+							ng-repeat="category in categoryList | filter:searchCategoryText"  ng-click="displayProductsForCategory(category)"
+							><a  href="#tab1" >
+							<span class="prdDisplayBoxName">{{ category.name | uppercase }}</span>  
+							
+							</a>
+							
+							 </li>
+						</ul>
+				</div>
+			
+		   </div>
+		
 		</div>
 		
-       <div class="col-md-8 menu-category list-group pre-scrollable">
-			<div class="col-md-2">Categary</div>
-			<div class="col-md-2">Categary</div>
-			<div class="col-md-2">Categary</div>
-			<div class="col-md-2">Categary</div>
-			<div class="col-md-2">Categary</div>
-			<div class="col-md-2">Categary</div>
-			<div class="col-md-2">Categary</div>
-			<div class="col-md-2">Categary</div>
-			<div class="col-md-2">Categary</div>
-			<div class="col-md-2">Categary</div>
-			<div class="col-md-2">Categary</div>
-			<div class="col-md-2">Categary</div>
-		</div>
-		
-      
 	
-	</div>
+	
+</div>
+{% endraw %}
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../static/lib/jquery/jquery-2.1.1.min.js"></script>
+    <script src="../static/lib/jquery/jquery.print.js"></script>
+    <script src="../static/lib/bootstrap/js/bootstrap.min.js"></script>

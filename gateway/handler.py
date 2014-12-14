@@ -24,10 +24,14 @@ class BaseHandler(webapp2.RequestHandler):
         self.redirect(users.create_logout_url("/"))
     
     def render_home(self):
-        self.response.out.write(renderTemplate('index.html', {"user": self.user}))
+        self.response.out.write(renderTemplate('sales.html', {"user": self.user}))
         
     def render_report(self):
         self.response.out.write(renderTemplate('report.html', {"user": self.user}))
+       
+    def get_list(self, modelName):
+        from model.products import productList
+        self.response.write(json.dumps(productList))
         
     def create(self, modelName):
         modelClass = self.__get_model_class__(modelName)

@@ -1,75 +1,62 @@
-html,body,.container
-{
-    height:100%;
-	background:silver;
-}
-.container
-{
-    display:table;
-    width: 100%;
-    margin-top: -50px;
-    padding: 50px 0 0 0; /*set left/right padding according to needs*/
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-header
-{
-    background: green;
-    height: 50px;
+.prdDisplayBoxPrice {
+
+font-size: 12px;
+margin-left: 40px;
+margin-bottom: 0px;
 }
 
-.row
-{
-    height: 100%;
-    display: table-row;
-}
-.col-md-1.no-float, .col-md-3.no-float, .col-md-4.no-float, .col-md-8.no-float {
-    float: none; /* thanks baxabbit */
-}
-.col-md-4
-{
-    display: table-cell;
-    background: silver;
-}
-.col-md-1
-{
-    display: table-cell;
-    background: silver;
+.prdDisplayBoxName {
+
+ display: block; 
+ text-align: center; 
+ word-wrap: break-word; 
+ font-size: 14px;
+  margin-top: 0px;
+
 }
 
-.col-md-8
-{
-    display: table-cell;
-    background: silver;
-  	
-}
-.col-md-3
-{
-   display: table-cell;
-    background: silver;
-  	
-}
 
-.num{
-padding: 8px 8px 8px 4px;
-display: inline-block;
-text-align: center;
-}
-
-.num-modbutton{
-border: none;
-color: white;
-background: #7f82ac;
-font-size: 14px;
-}
-
-.numButton{
-height: 50px;
-width: 50px;
-margin: 0px 0px 4px 0px;
+.nav-pills > .active > a,
+.nav-pills > .active > a:hover,.nav-pills > li > a:hover {
+text-decoration: none;
 font-weight: bold;
-vertical-align: middle;
-color: #555555;
+
+border-width:2px;	
+
+border-style: groove;
+    color: black !important;
+  background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#f7f7f8),color-stop(100%,#ececee));
+}
+.nav-pills > li > a{
+    border-radius:0px;
 }
 
+
+.billTable{
+border-color: orange !important;
+}
+
+.bill-scrolable-height{
+min-height:290px;
+}
+
+.pre-scrollable {
+max-height: 290px !important;
+
+}
+
+.billControls{
+max-width: inherit;
+}
+
+.colorstrip{
+    width: 100%; height: 30px;
+    
+    border-color: #46b8da;
+    background-color: #5bc0de;
+	color: white;
+	margin-top: 7px;
+	font-size: 17px;
+	margin-bottom: 7px;
+	font-weight: bold;
 }
