@@ -4,6 +4,7 @@ import logging
 
 from routing import mapper
 from handler import BaseHandler
+from model.dbsession import DBSession
 
 class WsgiHandler(webapp2.RequestHandler):
     
@@ -20,6 +21,8 @@ class WsgiHandler(webapp2.RequestHandler):
                 method = kargs.get('action')
                 del kargs['action']
                 del kargs['controller']
+                session = DBSession()
+                command.set_session(session)
                 getattr(command, method)(**kargs)
             else:
                 raise Exception("Invalid url, please provide a valid url")
