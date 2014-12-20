@@ -5,7 +5,7 @@ import importlib
 import datetime
 
 from controller.render import renderTemplate
-from controller.command import create, read, update, delete, csv_import, csv_export
+from controller.command import create, read, update, delete, batch, csv_import, csv_export
 from model.serializer import getJsonString, getListJsonString
 from controller.constant import JSON_RESPONSE, CSV_RESPONSE
 
@@ -69,6 +69,18 @@ class BaseHandler(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = JSON_RESPONSE
         self.response.out.write('{"success": "successfully deleted"}')
         
+    def batch(self, modelName):
+        modelClass = self.__get_model_class__(modelName)
+        args = self.request.get("batchJson")
+        if args:
+            args = eval(args)
+        else:
+            raise Exception("batchJson is missing to perform batch operation")
+        batch(self.session, modelClass, args)
+        self.__commit__()
+        
+        self.response.headers['Content-Type'] = JSON_RESPONSE
+        self.response.out.write('{"success": "batch successfully"}')
         
     def list(self, modelName, pageNumber=None, pageCount=None):
         modelClass = self.__get_model_class__(modelName)
@@ -76,8 +88,8 @@ class BaseHandler(webapp2.RequestHandler):
         pageCount = pageCount or 50
         
         if pageNumber and pageCount:
-            limit = pageCount
-            offset = (pageNumber - 1) * pageCount
+            limit = int(pageCount)
+            offset = (int(pageNumber) - 1) * limit
             results = self.session.query(modelClass, {}, limit, offset)
         else:
             results = self.session.query(modelClass, {})  

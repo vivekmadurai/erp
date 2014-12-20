@@ -20,8 +20,18 @@ def delete(session, model, instanceId):
     instance = session.get(model, instanceId)
     session.delete(instance.key)
 
-def batch(session, batchDict):
-    pass
+def batch(session, model, args):
+    from model import BillItem
+    completedBills = args.get("completed")
+    for billId in completedBills:
+        billArgs = completedBills.get(billId)
+        billItemsArgs = billArgs.get("items")
+        del billArgs["items"]
+        instance = session.create(model, billArgs)
+        for itemArgs in billItemsArgs:
+            del itemArgs["price"]
+            itemArgs['Bill'] = instance.to_dict().get("instanceId")
+            session.create(BillItem, itemArgs)
 
 def csv_import(session, model, csvData):
     logging.info(csvData)
