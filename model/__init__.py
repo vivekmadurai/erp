@@ -61,9 +61,11 @@ class Receiving(POS):
     paymentType = ndb.StringProperty()
     comment = ndb.TextProperty()
     
-    
 class Store(POS):
-    pass
+    name = ndb.StringProperty()
+    adminUser = ndb.StringProperty()
+    currency = ndb.StringProperty()
+    branch = ndb.StringProperty()
 
 class StoreSubscription(POS):
     pass
@@ -72,4 +74,10 @@ class Customer(POS):
     pass
 
 class User(POS):
-    pass
+    firstName = ndb.StringProperty()
+    lastName = ndb.StringProperty()
+    name = ndb.StringProperty()
+    password = ndb.StringProperty()
+    emailId = ndb.StringProperty()
+    role = ndb.StringProperty()#we have Admin, Manager and User(default)
+    phoneNumber = ndb.IntegerProperty()

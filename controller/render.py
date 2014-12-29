@@ -41,6 +41,6 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 JINJA_ENVIRONMENT.filters["humanize"] = humanize
 
-def renderTemplate(template, templateValues):
+def render_template(template, templateValues):
     template = JINJA_ENVIRONMENT.get_template(template)
     return template.render(templateValues)
