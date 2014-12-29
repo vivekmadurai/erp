@@ -3,7 +3,7 @@ from google.appengine.ext import ndb
 class POS(ndb.Expando):
     instanceId = ndb.StringProperty(indexed=True)
     Store = ndb.StringProperty(indexed=True)
-    Date = ndb.DateTimeProperty(auto_now_add=True)
+    #Date = ndb.DateTimeProperty(auto_now_add=True)
     
     def to_dict(self):
         result = super(POS, self).to_dict()
@@ -42,6 +42,8 @@ class Product(POS):
     Discount = ndb.FloatProperty()
     Quantity = ndb.FloatProperty()
     Location = ndb.StringProperty()
+    ExpDate = ndb.StringProperty()
+    Reorder = ndb.FloatProperty()
     
 class Store(POS):
     pass

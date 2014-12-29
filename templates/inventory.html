@@ -1,0 +1,315 @@
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>ERPFOG - POS</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../static/css/custom.css" rel="stylesheet">
+    
+    <script src="../static/lib/underscore.min.js"></script>
+    <script src="../static/lib/angular/angular.min.js"></script>
+    
+    <script src="../static/js/inventorycontroller.js"></script>
+    <script src="../static/js/formValidation.js"></script>
+	
+  </head>
+
+ <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse " role="navigation">
+       <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">POS</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/home">Home</a></li>
+            <li><a href="/report">Report</a></li>
+            <li><a href="#inventory">Inventory</a></li>
+            <li><a href="#user">User</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Welcome, {{ user.nickname() }} <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">My Account</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="/logout">logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav> 
+ 
+ {% raw %}
+ <div class="container" ng-app="POSApp" >  
+             
+        
+        <div role="tabpanel">
+        
+
+              <!-- Nav tabs -->
+             <ul class="nav nav-tabs">
+              <li class="active">
+                <a href="inventory" role="tab" data-toggle="tab">Product List</a>
+              </li>
+              <li><a href="addProduct" >Add Product</a></li>
+              <li><a href="addCategory"  >Add Category</a></li>
+              <li><a href="categoryList">Category List</a></li>
+             </ul>
+
+              <!-- Tab panes -->
+              
+              <div class="tab-content">
+                <div id="Products" class="tab-pane active" ng-controller="PaginationCtrl">
+                            <dialog id="editProductWindow">  
+                                <div  class="tab-pane" id="editProduct" >             
+                                            <form method="post" name="productForm" >
+                                                    <div class="form-group col-md-6" >
+                                                        <label for="Name">Product Name</label>
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" name="Name" ng-model="product.Name" placeholder="Product Name" required>
+                                                            <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="EAN13">EAN13</label>
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" ng-model="product.EAN13" placeholder="Optional">
+                                                            <span class="input-group-addon info"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="Category">Category</label>
+                                                        <div class="input-group">
+                                                            <select ng-model="product.Category" >
+                                                            
+                                                                <option value={{product.Category}}>{{product.Category}}</option>
+
+                                                                <option  ng-repeat="category in categoryList" value="{{category.Category}}" >
+                                                                    {{category.Category}}
+                                                                </option>
+                                                            </select>
+                                                            &nbsp;
+                                                            <a href="addCategory">Add New Category</a>
+                                                            
+                                                            <span class="input-group-addon success"><span class="glyphicon glyphicon-remove"></span></span>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="ExpDate">Expire Date</label>
+                                                        <div class="input-group">
+                                                            <input name="ExpDate" ng-model="product.ExpDate" placeholder="">
+                                                            <span class="input-group-addon info"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="validate-phone">Buying Price</label>
+                                                        <div class="input-group" data-validate="number">
+                                                            <input type="number" class="form-control" name="BuyingPrice" ng-model="product.BuyingPrice" placeholder="" required>
+                                                            <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="validate-length">Selling Price</label>
+                                                        <div class="input-group" data-validate="number">
+                                                            <input type="number" class="form-control" name="SellingPrice" ng-model="product.SellingPrice" placeholder="" required>
+                                                            <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-md-6">
+                                                        <label for="Discount">Discount</label>
+                                                        <div class="input-group" data-validate="number">
+                                                            <input type="number" class="form-control" name="Discount" ng-model="product.Discount" placeholder="Enter Discount Percentage" >
+                                                             <span class="input-group-addon info"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                            
+                                                        </div>
+                                                           
+                                                    </div>
+                                                    
+                                                    <div class="form-group col-md-6">
+                                                        <label for="Quantity">Quantity</label>
+                                                        <div class="input-group" data-validate="number">
+                                                            <input type="number" class="form-control" name="Quantity" ng-model="product.Quantity" placeholder="Enter initial Product Quantity" required>
+                                                            <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="Reorder">Reorder Level</label>
+                                                        <div class="input-group" data-validate="number">
+                                                            <input type="number" class="form-control" name="Reorder" ng-model="product.Reorder" placeholder="Threshold Quantity">
+                                                            <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                       
+                                                        <label for="Location">Location</label>
+                                                        <div class="input-group" data-validate="length" data-length="5">
+                                                            <input type="text" class="form-control" name="Location" ng-model="product.Location" placeholder="Product Location">
+                                                            <span class="input-group-addon info"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                       
+                                                        <label for="Description">Product Description</label>
+                                                        <div class="input-group" data-validate="length" data-length="5">
+                                                            <textarea type="text" class="form-control" name="Description" ng-model="product.Description" placeholder="Validate Length" ></textarea>
+                                                            <span class="input-group-addon info"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group col-md-12" align='center'>
+                                                        <a href="#" class="btn btn-info  btn-lg" ng-click="editProduct(product)">Update Product</a>
+                                                        <a href="#" class="btn btn-info  btn-lg" ng-click="cancelEdit()">Cancel</a>
+                                                    </div>
+                                            </form>
+                                </div>
+                           </dialog>
+                           
+                            <dialog id="viewProductWindow">  
+                                <div  class="tab-pane" id="viewProduct" >             
+                                            <form method="post" name="productForm" >
+                                                    <div class="form-group col-md-6" >
+                                                        <label for="Name">Product Name:</label>
+                                                        {{product.Name}}
+                                                           
+                                                        
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="EAN13">EAN13:</label>
+                                                        
+                                                          {{product.EAN13}}
+                                                        
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="Category">Category:</label>
+                                                        {{product.Category}}
+                                                            
+                                                        
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="ExpDate">Expire Date:</label>
+                                                        {{product.ExpDate}}
+                                                        
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="validate-phone">Buying Price:</label>
+                                                        
+                                                            {{product.BuyingPrice}}
+                                                        
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="validate-length">Selling Price:</label>
+                                                        
+                                                            {{product.SellingPrice}}
+                                                       
+                                                    </div>
+
+                                                    <div class="form-group col-md-6">
+                                                        <label for="Discount">Discount:</label>{{product.Discount}}
+                                                            
+                                                        
+                                                           
+                                                    </div>
+                                                    
+                                                    <div class="form-group col-md-6">
+                                                        <label for="Quantity">Quantity:</label>{{product.Quantity}}
+                                                        
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="Reorder">Reorder Level:</label>{{product.Reorder}}
+                                                        
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                       
+                                                        <label for="Location">Location:</label>
+                                                        {{product.Location}}
+                                                        
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                       
+                                                        <label for="Description">Product Description:</label>
+                                                        {{product.Description}}
+                                                        
+                                                    </div>
+                                                    
+                                                    <div class="form-group col-md-12" align='center'>
+                                                        <a href="#" class="btn btn-info  btn-lg" ng-click="closeView()">Close</a>
+                                                    </div>
+                                               </form>
+                                            
+                                </div>
+                           </dialog>
+                            <table class="table table-striped">
+                              <thead>
+                                <tr>
+                                  <th>Product</th>
+                                  <th>Category</th>
+                                  <th>SellingPrice</th>
+                                  <th>Quantity</th>
+                                  <th>Edit/Delete</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr ng-repeat="product in products">
+                                  <td>{{product.Name}}</td>
+                                  <td>{{product.Category}}</td>
+                                  <td>{{product.SellingPrice}}</td>
+                                  <td>{{product.Quantity}}</td>
+                                  <td><a href="#" ng-click="openwindow(product.instanceId)">Edit</a>
+                                  <a href="#" ng-click="openViewProductWindow(product.instanceId)">View</a></td>
+                                </tr>
+                              </tbody>
+                              <tfoot>
+                                <td colspan="5" align="center">
+                                  <div class="pagination" align="center">
+                                    <ul class="pagination pull-right">
+                                      <li ng-class="prevPageDisabled()">
+                                        <a href ng-click="prevPage()">« Prev</a>
+                                      </li>
+                                      <li ng-repeat="n in range()" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
+                                        <a href="#">Page {{currentPage}} of {{totalPageCount}}</a>
+                                      </li>
+                                      <li ng-class="nextPageDisabled()">
+                                        <a href ng-click="nextPage()">Next »</a>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </td>
+                              </tfoot>
+                            </table>
+                        
+                            
+                
+                    
+                   </div>      
+              </div>
+              
+              
+        
+        </div>
+</div>
+
+</div>
+{% endraw %}
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../static/lib/jquery/jquery-2.1.1.min.js"></script>
+    <script src="../static/lib/jquery/jquery.print.js"></script>
+    <script src="../static/lib/bootstrap/js/bootstrap.min.js"></script>

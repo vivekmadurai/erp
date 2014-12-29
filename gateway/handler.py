@@ -4,6 +4,7 @@ import logging
 import importlib
 import datetime
 
+
 from controller.render import renderTemplate
 from controller.command import create, read, update, delete, csv_import, csv_export
 from model.serializer import getJsonString, getListJsonString
@@ -28,7 +29,27 @@ class BaseHandler(webapp2.RequestHandler):
         
     def render_report(self):
         self.response.out.write(renderTemplate('report.html', {"user": self.user}))
-       
+        
+    def render_inventory(self):
+        self.response.out.write(renderTemplate('inventory.html', {"user": self.user}))
+        
+    def add_product(self):
+        self.response.out.write(renderTemplate('addProduct.html', {"user": self.user}))
+        
+    def all_product(self):
+        self.response.out.write(renderTemplate('allProduct.html', {"user": self.user}))
+    
+    
+    def add_category(self):
+        self.response.out.write(renderTemplate('addCategory.html', {"user": self.user}))     
+
+        
+    def render_category(self):
+        self.response.out.write(renderTemplate('categoryList.html', {"user": self.user}))             
+    
+    def edit_product(self):
+        self.response.out.write(renderTemplate('editProduct.html', {"user": self.user}))     
+    
     def get_list(self, modelName):
         from model.products import productList
         self.response.write(json.dumps(productList))
@@ -73,11 +94,20 @@ class BaseHandler(webapp2.RequestHandler):
     def list(self, modelName, pageNumber=None, pageCount=None):
         modelClass = self.__get_model_class__(modelName)
         pageNumber = pageNumber or 1
-        pageCount = pageCount or 50
+        
+        pageNumber = int (pageNumber)
+        
+        if pageCount:
+            pageCount = int (pageCount) or 50
         
         if pageNumber and pageCount:
-            limit = pageCount
+            limit = int (pageCount)
             offset = (pageNumber - 1) * pageCount
+            
+            
+            if pageNumber == 1:
+                offset = 0
+            
             results = self.session.query(modelClass, {}, limit, offset)
         else:
             results = self.session.query(modelClass, {})  
@@ -85,6 +115,16 @@ class BaseHandler(webapp2.RequestHandler):
         jsonStr = getListJsonString(results)
         self.response.headers['Content-Type'] = JSON_RESPONSE
         self.response.out.write(jsonStr)
+        
+    def count(self, modelName):
+        results = 0;
+        modelClass = self.__get_model_class__(modelName)
+        results = self.session.count(modelClass)
+        logging.info("handle  %i"%results)
+       
+        self.response.headers['Content-Type'] = JSON_RESPONSE
+        self.response.out.write('{"count": %s}'%results)
+        return results
         
     def import_data(self, modelName):
         modelClass = self.__get_model_class__(modelName)
@@ -124,6 +164,7 @@ class BaseHandler(webapp2.RequestHandler):
             value = self.request.get(field)
             if model:
                 prop = model._properties.get(field)
+                logging.info("Field are %s"%(field))
                 if not prop:
                     raise Exception("Invalid field name %s for the mode %s"%(field, model.__name__))
                 propName = prop.__class__.__name__
@@ -134,3 +175,19 @@ class BaseHandler(webapp2.RequestHandler):
             params[field] = value 
         logging.info("Request params %s"%params)
         return params
+    
+    def createObject(self, modelName):
+        modelClass = self.__get_model_class__(modelName)
+        
+        args = self.request.get("obj")
+        if args:
+            args = eval(args)
+        else:
+            raise Exception("obj is missing to perform create object operation")
+        
+        instance = create(self.session, modelClass, args)
+        self.__commit__()
+        
+        jsonStr = getJsonString(instance)
+        self.response.headers['Content-Type'] = JSON_RESPONSE
+        self.response.out.write(jsonStr)

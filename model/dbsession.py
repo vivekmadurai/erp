@@ -19,6 +19,8 @@ class DBSession:
         instance = modelClass(id = instanceId)
         instance.instanceId = instanceId
         for name in args:
+            logging.info("Parameter name %s"%(name))
+            logging.info("Parameter value %s"%(args.get(name)))
             instance._values[name] = args.get(name)
             
         self.createdList.append(instance)
@@ -55,6 +57,11 @@ class DBSession:
         if result:
             return result
         raise Exception("Unable to retrieve the record with id %s for the model %s"%(instanceId, modelClass.__name__))
+        
+    def count(self, modelClass):
+        result = modelClass.query().count(100)
+        logging.info("Count %s"%result)
+        return result
 
     def query(self, modelClass, filterArgs, limit=1000, offset=0):
         query = modelClass.query()
