@@ -1,5 +1,5 @@
-function formValidation() {
-$('.input-group input[required], .input-group textarea[required], .input-group select[required]').on('keyup change', function() {
+angular.element(document).ready(function () {
+    $('.input-group input[required], .input-group textarea[required], .input-group select[required]').on('keyup change', function() {
 		var $form = $(this).closest('form'),
             $group = $(this).closest('.input-group'),
 			$addon = $group.find('.input-group-addon'),
@@ -34,4 +34,8 @@ $('.input-group input[required], .input-group textarea[required], .input-group s
             $form.find('[type="submit"]').prop('disabled', true);
         }
 	});
-  }
+    
+    $('.input-group input[required], .input-group textarea[required], .input-group select[required]').trigger('change');
+    
+    
+});

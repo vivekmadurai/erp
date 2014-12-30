@@ -62,22 +62,28 @@
         
 
               <!-- Nav tabs -->
-             <ul class="nav nav-tabs">
-              <li class="active">
-                <a href="inventory" role="tab" data-toggle="tab">Product List</a>
-              </li>
-              <li><a href="addProduct" >Add Product</a></li>
-              <li><a href="addCategory"  >Add Category</a></li>
-              <li><a href="categoryList">Category List</a></li>
-             </ul>
+             <div>
+              
+                 
+                
 
               <!-- Tab panes -->
               
               <div class="tab-content">
                 <div id="Products" class="tab-pane active" ng-controller="PaginationCtrl">
+                            <ul class="nav nav-tabs">
+                              <li class="active">
+                                <a href="inventory" role="tab" data-toggle="tab">Product List</a>
+                              </li>
+                              <li><a href="addProduct" >Add Product</a></li>
+                              <li><a href="addCategory"  >Add Category</a></li>
+                              <li><a href="categoryList">Category List</a></li>
+                              <li align=right style="float:right !important">
+                              <a href="#" class="btn btn-info  btn-lg" ng-click="importProduct()">Import Product</a></li>
+                             </ul>
                             <dialog id="editProductWindow">  
                                 <div  class="tab-pane" id="editProduct" >             
-                                            <form method="post" name="productForm" >
+                                            <form method="post" ng-submit="editProduct(product)" name="productForm" >
                                                     <div class="form-group col-md-6" >
                                                         <label for="Name">Product Name</label>
                                                         <div class="input-group">
@@ -118,7 +124,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label for="validate-phone">Buying Price</label>
+                                                        <label for="BuyingPrice">Buying Price</label>
                                                         <div class="input-group" data-validate="number">
                                                             <input type="number" class="form-control" name="BuyingPrice" ng-model="product.BuyingPrice" placeholder="" required>
                                                             <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
@@ -152,7 +158,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label for="Reorder">Reorder Level</label>
                                                         <div class="input-group" data-validate="number">
-                                                            <input type="number" class="form-control" name="Reorder" ng-model="product.Reorder" placeholder="Threshold Quantity">
+                                                            <input type="number" class="form-control" name="Reorder" ng-model="product.Reorder" placeholder="Threshold Quantity" required>
                                                             <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
                                                         </div>
                                                     </div>
@@ -174,8 +180,11 @@
                                                     </div>
                                                     
                                                     <div class="form-group col-md-12" align='center'>
-                                                        <a href="#" class="btn btn-info  btn-lg" ng-click="editProduct(product)">Update Product</a>
-                                                        <a href="#" class="btn btn-info  btn-lg" ng-click="cancelEdit()">Cancel</a>
+                                                        
+                                                        <button type="submit" class="btn btn-primary">Update Product</button>
+                                                        <button  class="btn btn-primary" ng-click="cancelEdit()">Cancel</button>
+
+
                                                     </div>
                                             </form>
                                 </div>
