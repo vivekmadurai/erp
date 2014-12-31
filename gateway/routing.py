@@ -26,7 +26,6 @@ mapper.connect("/{modelName}/import", controller="main", action="import_data", c
 mapper.connect("/{modelName}/export", controller="main", action="export_data")
 
 mapper.connect("/{modelName}/create", controller="main", action="create", conditions=dict(method=['POST']))
-mapper.connect("/{modelName}/createObject", controller="main", action="createObject", conditions=dict(method=['POST']))
 mapper.connect("/{modelName}/batch", controller="main", action="batch", conditions=dict(method=['POST']))
 
 mapper.connect("/{modelName}/{instanceId}/read", controller="main", action="read")

@@ -56,19 +56,10 @@
  
  {% raw %}
  <div class="container" ng-app="POSApp" >  
-             
-        
         <div role="tabpanel">
-        
-
               <!-- Nav tabs -->
              <div>
-              
-                 
-                
-
               <!-- Tab panes -->
-              
               <div class="tab-content">
                 <div id="Products" class="tab-pane active" ng-controller="PaginationCtrl">
                             <ul class="nav nav-tabs">
@@ -87,26 +78,26 @@
                                                     <div class="form-group col-md-6" >
                                                         <label for="Name">Product Name</label>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" name="Name" ng-model="product.Name" placeholder="Product Name" required>
+                                                            <input type="text" class="form-control" name="Name" ng-model="product.name" placeholder="Product Name" required>
                                                             <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="EAN13">EAN13</label>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" ng-model="product.EAN13" placeholder="Optional">
+                                                            <input type="text" class="form-control" ng-model="product.ean13" placeholder="Optional">
                                                             <span class="input-group-addon info"><span class="glyphicon glyphicon-asterisk"></span></span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="Category">Category</label>
                                                         <div class="input-group">
-                                                            <select ng-model="product.Category" >
+                                                            <select ng-model="product.category" >
                                                             
-                                                                <option value={{product.Category}}>{{product.Category}}</option>
+                                                                <option value={{product.category}}>{{product.category}}</option>
 
-                                                                <option  ng-repeat="category in categoryList" value="{{category.Category}}" >
-                                                                    {{category.Category}}
+                                                                <option  ng-repeat="category in categoryList" value="{{category.category}}" >
+                                                                    {{category.category}}
                                                                 </option>
                                                             </select>
                                                             &nbsp;
@@ -119,21 +110,21 @@
                                                     <div class="form-group col-md-6">
                                                         <label for="ExpDate">Expire Date</label>
                                                         <div class="input-group">
-                                                            <input name="ExpDate" ng-model="product.ExpDate" placeholder="">
+                                                            <input name="ExpDate" ng-model="product.expDate" placeholder="">
                                                             <span class="input-group-addon info"><span class="glyphicon glyphicon-asterisk"></span></span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="BuyingPrice">Buying Price</label>
                                                         <div class="input-group" data-validate="number">
-                                                            <input type="number" class="form-control" name="BuyingPrice" ng-model="product.BuyingPrice" placeholder="" required>
+                                                            <input type="number" class="form-control" name="BuyingPrice" ng-model="product.buyingPrice" placeholder="" required>
                                                             <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="validate-length">Selling Price</label>
                                                         <div class="input-group" data-validate="number">
-                                                            <input type="number" class="form-control" name="SellingPrice" ng-model="product.SellingPrice" placeholder="" required>
+                                                            <input type="number" class="form-control" name="SellingPrice" ng-model="product.sellingPrice" placeholder="" required>
                                                             <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
                                                         </div>
                                                     </div>
@@ -141,7 +132,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label for="Discount">Discount</label>
                                                         <div class="input-group" data-validate="number">
-                                                            <input type="number" class="form-control" name="Discount" ng-model="product.Discount" placeholder="Enter Discount Percentage" >
+                                                            <input type="number" class="form-control" name="Discount" ng-model="product.discount" placeholder="Enter Discount Percentage" >
                                                              <span class="input-group-addon info"><span class="glyphicon glyphicon-asterisk"></span></span>
                                                             
                                                         </div>
@@ -151,14 +142,14 @@
                                                     <div class="form-group col-md-6">
                                                         <label for="Quantity">Quantity</label>
                                                         <div class="input-group" data-validate="number">
-                                                            <input type="number" class="form-control" name="Quantity" ng-model="product.Quantity" placeholder="Enter initial Product Quantity" required>
+                                                            <input type="number" class="form-control" name="Quantity" ng-model="product.quantity" placeholder="Enter initial Product Quantity" required>
                                                             <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="Reorder">Reorder Level</label>
                                                         <div class="input-group" data-validate="number">
-                                                            <input type="number" class="form-control" name="Reorder" ng-model="product.Reorder" placeholder="Threshold Quantity" required>
+                                                            <input type="number" class="form-control" name="Reorder" ng-model="product.reorder" placeholder="Threshold Quantity" required>
                                                             <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
                                                         </div>
                                                     </div>
@@ -166,7 +157,7 @@
                                                        
                                                         <label for="Location">Location</label>
                                                         <div class="input-group" data-validate="length" data-length="5">
-                                                            <input type="text" class="form-control" name="Location" ng-model="product.Location" placeholder="Product Location">
+                                                            <input type="text" class="form-control" name="Location" ng-model="product.location" placeholder="Product Location">
                                                             <span class="input-group-addon info"><span class="glyphicon glyphicon-asterisk"></span></span>
                                                         </div>
                                                     </div>
@@ -174,7 +165,7 @@
                                                        
                                                         <label for="Description">Product Description</label>
                                                         <div class="input-group" data-validate="length" data-length="5">
-                                                            <textarea type="text" class="form-control" name="Description" ng-model="product.Description" placeholder="Validate Length" ></textarea>
+                                                            <textarea type="text" class="form-control" name="Description" ng-model="product.description" placeholder="Validate Length" ></textarea>
                                                             <span class="input-group-addon info"><span class="glyphicon glyphicon-asterisk"></span></span>
                                                         </div>
                                                     </div>
@@ -195,65 +186,65 @@
                                             <form method="post" name="productForm" >
                                                     <div class="form-group col-md-6" >
                                                         <label for="Name">Product Name:</label>
-                                                        {{product.Name}}
+                                                        {{product.name}}
                                                            
                                                         
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="EAN13">EAN13:</label>
                                                         
-                                                          {{product.EAN13}}
+                                                          {{product.ean13}}
                                                         
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="Category">Category:</label>
-                                                        {{product.Category}}
+                                                        {{product.category}}
                                                             
                                                         
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="ExpDate">Expire Date:</label>
-                                                        {{product.ExpDate}}
+                                                        {{product.expDate}}
                                                         
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="validate-phone">Buying Price:</label>
                                                         
-                                                            {{product.BuyingPrice}}
+                                                            {{product.buyingPrice}}
                                                         
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="validate-length">Selling Price:</label>
                                                         
-                                                            {{product.SellingPrice}}
+                                                            {{product.sellingPrice}}
                                                        
                                                     </div>
 
                                                     <div class="form-group col-md-6">
-                                                        <label for="Discount">Discount:</label>{{product.Discount}}
+                                                        <label for="Discount">Discount:</label>{{product.discount}}
                                                             
                                                         
                                                            
                                                     </div>
                                                     
                                                     <div class="form-group col-md-6">
-                                                        <label for="Quantity">Quantity:</label>{{product.Quantity}}
+                                                        <label for="Quantity">Quantity:</label>{{product.quantity}}
                                                         
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label for="Reorder">Reorder Level:</label>{{product.Reorder}}
+                                                        <label for="Reorder">Reorder Level:</label>{{product.reorder}}
                                                         
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                        
                                                         <label for="Location">Location:</label>
-                                                        {{product.Location}}
+                                                        {{product.location}}
                                                         
                                                     </div>
                                                     <div class="form-group col-md-12">
                                                        
                                                         <label for="Description">Product Description:</label>
-                                                        {{product.Description}}
+                                                        {{product.description}}
                                                         
                                                     </div>
                                                     
@@ -276,10 +267,10 @@
                               </thead>
                               <tbody>
                                 <tr ng-repeat="product in products">
-                                  <td>{{product.Name}}</td>
-                                  <td>{{product.Category}}</td>
-                                  <td>{{product.SellingPrice}}</td>
-                                  <td>{{product.Quantity}}</td>
+                                  <td>{{product.name}}</td>
+                                  <td>{{product.category}}</td>
+                                  <td>{{product.sellingPrice}}</td>
+                                  <td>{{product.quantity}}</td>
                                   <td><a href="#" ng-click="openwindow(product.instanceId)">Edit</a>
                                   <a href="#" ng-click="openViewProductWindow(product.instanceId)">View</a></td>
                                 </tr>

@@ -7,7 +7,7 @@ def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
 
 def send_confirmation_mail(emailId, password):
         url = "https://erpfog.appspot.com/signin"
-        senderAddress = "erpfog.com Support <support@erpfog.com>"
+        senderAddress = "erpfog.com Support <erpfog@appspot.gserviceaccount.com>"
         subject = "Confirm your registration"
         body = """
                 Thank you for creating an account! 

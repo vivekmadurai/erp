@@ -233,30 +233,14 @@ class BaseHandler(webapp2.RequestHandler):
             value = self.request.get(field)
             if model:
                 prop = model._properties.get(field)
-                logging.info("Field are %s"%(field))
                 if not prop:
                     raise Exception("Invalid field name %s for the mode %s"%(field, model.__name__))
                 propName = prop.__class__.__name__
+                logging.info("Field are %s == %s"%(field,propName))
                 if propName == "FloatProperty":
                     value = float(value)
-                elif propName == "DateTime":
+                elif propName == "DateTimeProperty":
                     value = datetime.datetime.now()
             params[field] = value 
         logging.info("Request params %s"%params)
         return params
-    
-    def createObject(self, modelName):
-        modelClass = self.__get_model_class__(modelName)
-        
-        args = self.request.get("obj")
-        if args:
-            args = eval(args)
-        else:
-            raise Exception("obj is missing to perform create object operation")
-        
-        instance = create(self.session, modelClass, args)
-        self.__commit__()
-        
-        jsonStr = getJsonString(instance)
-        self.response.headers['Content-Type'] = JSON_RESPONSE
-        self.response.out.write(jsonStr)

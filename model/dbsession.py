@@ -25,8 +25,6 @@ class DBSession:
         instance = modelClass(id = instanceId)
         instance.instanceId = instanceId
         for name in args:
-            logging.info("Parameter name %s"%(name))
-            logging.info("Parameter value %s"%(args.get(name)))
             instance._values[name] = args.get(name)
             
         self.createdList.append(instance)

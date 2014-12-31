@@ -15,7 +15,7 @@
     <script src="../static/lib/underscore.min.js"></script>
     <script src="../static/lib/angular/angular.min.js"></script>
     
-    <script src="../static/js/controller.js"></script>
+    <script src="../static/js/bill.controller.js"></script>
 	
   </head>
 
@@ -176,7 +176,7 @@
 					ng-repeat="product in selectedProductCategary | filter:searchText | filter:{name: selectedCategory.name}"
 					ng-click="handleClick(product)"><a  href="#tab1" >
 					<span class="prdDisplayBoxName">{{ product.name | uppercase }}</span>  
-					<span class="prdDisplayBoxPrice">Rs. {{ product.price }}</span>
+					<span class="prdDisplayBoxPrice">Rs. {{ product.sellingPrice }}</span>
 					
 					</a>
 					

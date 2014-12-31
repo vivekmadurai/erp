@@ -101,8 +101,8 @@ var items = [];
     $scope.updateCategory = function(category) {
     
             $http({
-                   method: 'post',
-                   url:'/Category/create', 
+                   method: 'put',
+                   url:'/Category/'+category.instanceId+'/update', 
                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                    data: $.param(category)
                    }).success(function(data, status, headers, config) {
@@ -115,7 +115,6 @@ var items = [];
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
                   });
-            
      }
         
     function getCategory(instanceId) {
@@ -254,7 +253,7 @@ app.controller("addProductCtl", function($scope, $http) {
         $http.get("/Category/list").success(function(result){
             $scope.categoryList = result;
             
-            $scope.product.category = $scope.categoryList[$scope.categoryList.length-1].instanceId;
+            $scope.product.category = "All";
              
         }).error(function(){
             alert("Unable to load category list")
@@ -332,8 +331,8 @@ var items = [];
   $scope.editProduct = function(product) {
      
             $http({
-                   method: 'post',
-                   url:'/Product/create', 
+                   method: 'put',
+                   url:'/Product/'+product.instanceId+'/update', 
                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                    data: $.param(product)
                 }).success(function(data, status, headers, config) {
