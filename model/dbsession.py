@@ -12,10 +12,16 @@ class DBSession:
         self.createdList = list()
         self.updatedList = list()
         self.deleteList = list()
+        self.user = None
+        
+    def set_user(self, user):
+        self.user = user
 
     def create(self, modelClass, args):
         logging.info("creating new record for %s"%(modelClass.__name__))
         instanceId = args.get("instanceId") or generateUUID()
+        if args.get("store") == None:
+            args["store"] = self.user.get("store")
         instance = modelClass(id = instanceId)
         instance.instanceId = instanceId
         for name in args:
@@ -51,11 +57,13 @@ class DBSession:
             logging.info("Deleting %s record"%(len(self.deleteList)))
             ndb.delete_multi(self.deleteList)
             
-    def get(self, modelClass, instanceId):
+    def get(self, modelClass, instanceId, returnNone=False):
         result = ndb.Key(modelClass, instanceId).get()
         #result = modelClass.query(modelClass.instanceId==instanceId).get()
         if result:
             return result
+        if returnNone:
+            return None
         raise Exception("Unable to retrieve the record with id %s for the model %s"%(instanceId, modelClass.__name__))
         
     def count(self, modelClass):

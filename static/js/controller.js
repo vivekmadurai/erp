@@ -13,7 +13,7 @@ posApp.factory('sharedService', function($rootScope) {
     sharedService.broadcastItem = function(name) {
         $rootScope.$broadcast('handleBroadcast', {name: name});
     };
-
+    
     return sharedService;
 });
 
@@ -111,13 +111,25 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
     $scope.printBill = function() {
         if($scope.currentBill) {
             var billDetails = $("#billDetails")
-            setTimeout(function(){billDetails.print()}, 500);
+            //setTimeout(function(){billDetails.print()}, 500);
             if($scope.bills.draft[$scope.currentBill.id]){
                 delete $scope.bills.draft[$scope.currentBill.id]
             }
 	        $scope.bills.completed[$scope.currentBill.id] = $scope.currentBill;
 	        //TODO: need to send to server and remove from the completed queue
-	        //...
+	        $http({
+	           method: 'post',
+	           url:'/Bill/batch', 
+	           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	           data: $.param({batchJson : JSON.stringify($scope.bills)})
+	        }).success(function(data, status, headers, config) {
+			    // this callback will be called asynchronously
+			    // when the response is available
+			  }).
+			  error(function(data, status, headers, config) {
+			    // called asynchronously if an error occurs
+			    // or server returns response with an error status.
+			  });
 	        localStorage.setItem("bills", JSON.stringify($scope.bills));
 	        //$scope.currentBill = null;
 	    }

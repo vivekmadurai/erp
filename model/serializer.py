@@ -1,10 +1,10 @@
 import json
 import datetime
 
-def getListJsonString(results):
+def get_list_json(results):
     return json.dumps([result.to_dict() for result in results], cls=ComplexEncoder)
 
-def getJsonString(result):
+def get_json(result):
     return json.dumps(result.to_dict(), cls=ComplexEncoder)
 
 class ComplexEncoder(json.JSONEncoder):
