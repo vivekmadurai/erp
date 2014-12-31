@@ -35,7 +35,7 @@ app.controller("editProductCtl", function($scope, $http) {
         $http.get("/Category/list").success(function(result){
             $scope.categoryList = result;
             
-            //$scope.product.Category = $scope.product.Category;
+            //$scope.product.category = $scope.product.category;
              
         }).error(function(){
             alert("Unable to load category list")
@@ -48,9 +48,9 @@ app.controller("editProductCtl", function($scope, $http) {
      
             $http({
                    method: 'post',
-                   url:'/Product/createObject', 
+                   url:'/Product/create', 
                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                   data: $.param({obj : JSON.stringify(product)})
+                   data: $.param(product)
                 }).success(function(data, status, headers, config) {
                     // this callback will be called asynchronously
                     // when the response is available
@@ -102,10 +102,10 @@ var items = [];
     
             $http({
                    method: 'post',
-                   url:'/Category/createObject', 
+                   url:'/Category/create', 
                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                   data: $.param({obj : JSON.stringify(category)})
-                }).success(function(data, status, headers, config) {
+                   data: $.param(category)
+                   }).success(function(data, status, headers, config) {
                     // this callback will be called asynchronously
                     // when the response is available
                     dialog.close();
@@ -217,7 +217,7 @@ var items = [];
 });
 
 app.controller("addCategoryCtl", function($scope, $http) {
-        formValidation();
+        //formValidation();
 
         $scope.createCategory = function(category) {
         
@@ -225,9 +225,9 @@ app.controller("addCategoryCtl", function($scope, $http) {
         
             $http({
                    method: 'post',
-                   url:'/Category/createObject', 
+                   url:'/Category/create', 
                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                   data: $.param({obj : JSON.stringify(category)})
+                   data: $.param(category)
                 }).success(function(data, status, headers, config) {
                     // this callback will be called asynchronously
                     // when the response is available
@@ -254,7 +254,7 @@ app.controller("addProductCtl", function($scope, $http) {
         $http.get("/Category/list").success(function(result){
             $scope.categoryList = result;
             
-            $scope.product.Category = $scope.categoryList[$scope.categoryList.length-1].Category;
+            $scope.product.category = $scope.categoryList[$scope.categoryList.length-1].instanceId;
              
         }).error(function(){
             alert("Unable to load category list")
@@ -264,10 +264,10 @@ app.controller("addProductCtl", function($scope, $http) {
     $scope.createProduct = function(product) {
          $http({
                    method: 'post',
-                   url:'/Product/createObject', 
+                   url:'/Product/create', 
                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                    
-                    data: $.param({obj : JSON.stringify(product)})
+                    data: $.param(product)
                 }).success(function(data, status, headers, config) {
                     // this callback will be called asynchronously
                     // when the response is available
@@ -333,9 +333,9 @@ var items = [];
      
             $http({
                    method: 'post',
-                   url:'/Product/createObject', 
+                   url:'/Product/create', 
                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                   data: $.param({obj : JSON.stringify(product)})
+                   data: $.param(product)
                 }).success(function(data, status, headers, config) {
                     // this callback will be called asynchronously
                     // when the response is available
@@ -436,7 +436,7 @@ var items = [];
         $http.get("/Category/list").success(function(result){
             $scope.categoryList = result;
             
-            //$scope.product.Category = $scope.product.Category;
+            //$scope.product.category = $scope.product.category;
              
         }).error(function(){
             alert("Unable to load category list")
