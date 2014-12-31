@@ -50,7 +50,8 @@ class Product(POS):
     discount = ndb.FloatProperty()
     quantity = ndb.FloatProperty()
     location = ndb.StringProperty()
-    reorderLevel = ndb.FloatProperty()
+    reorder = ndb.FloatProperty()
+    expDate = ndb.DateTimeProperty()
     
 class Receiving(POS):
     product = ndb.StringProperty()

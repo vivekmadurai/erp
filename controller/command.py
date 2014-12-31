@@ -6,6 +6,10 @@ import datetime
 def create(session, model, args):
     instance = session.create(model, args)
     return instance
+    
+def count(session, model):
+    count = session.count(model)
+    return count
 
 def read(session, model, instanceId):
     instance = session.get(model, instanceId)

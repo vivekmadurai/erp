@@ -1,0 +1,109 @@
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>ERPFOG - POS</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../static/css/custom.css" rel="stylesheet">
+    
+    <script src="../static/lib/underscore.min.js"></script>
+    <script src="../static/lib/angular/angular.min.js"></script>
+    
+    <script src="../static/js/inventorycontroller.js"></script>
+    <script src="../static/js/formValidation.js"></script>
+	
+  </head>
+
+ <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse " role="navigation">
+       <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">POS</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/home">Home</a></li>
+            <li><a href="/report">Report</a></li>
+            <li><a href="#inventory">Inventory</a></li>
+            <li><a href="#user">User</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Welcome, {{ user.get('instanceId') }} <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">My Account</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="/logout">logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav> 
+ 
+ {% raw %}
+<div class="container" ng-app="POSApp" >
+
+    
+             
+        
+        <div role="tabpanel">
+
+              <!-- Nav tabs -->
+             <ul class="nav nav-tabs">
+              <li >
+                <a href="inventory">Product List</a>
+              </li>
+              <li ><a href="addProduct">Add Product</a></li>
+              <li class="active"><a href="addCategory">Add Category</a></li>
+              <li><a href="categoryList" >Category List</a></li>
+             </ul>
+
+              <!-- Tab panes -->
+              
+              <div class="tab-content">
+                 <div id="addCategory" ng-controller="addCategoryCtl">   
+                    <form method="post" name="categoryForm" ng-submit="createCategory(category)" >
+                        <div class="form-group col-md-4" ></div>
+                        <div class="form-group col-md-4" >
+                            <label for="name">Category Name</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="name" ng-model="category.name" placeholder="Category Name" required>
+                                <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group col-md-12" align='center'>
+                            
+                             <button type="submit" class="btn btn-primary">Add Category</button>
+                        </div>
+                    </form>
+                
+                </div>
+              
+              </div>
+        
+        </div>
+</div>
+
+</div>
+{% endraw %}
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../static/lib/jquery/jquery-2.1.1.min.js"></script>
+    <script src="../static/lib/jquery/jquery.print.js"></script>
+    <script src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
