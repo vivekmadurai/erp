@@ -1,21 +1,14 @@
 var app = angular.module("POSApp", []);
 
-
-
 app.controller("editProductCtl", function($scope, $http) {
 
-      
     var instanceId = location.search;
-
     instanceId = instanceId.slice(12);
-
+    
     getProductsInstance(instanceId);
     loadCategory();
 
-      
     function getProductsInstance(instanceId) {
-        
-        
 		$http.get("/Product/"+instanceId+"/read").success(function(result){
             $scope.product = result;
             
@@ -24,12 +17,8 @@ app.controller("editProductCtl", function($scope, $http) {
             alert("Unable to load product")
         });
         
-        
-       
-		
       return $scope.product;
     };
-    
     
     function loadCategory() {
         $http.get("/Category/list").success(function(result){
@@ -42,10 +31,7 @@ app.controller("editProductCtl", function($scope, $http) {
         })
     }
     
-   
-    
     $scope.editProduct = function(product) {
-     
             $http({
                    method: 'post',
                    url:'/Product/create', 
@@ -54,20 +40,17 @@ app.controller("editProductCtl", function($scope, $http) {
                 }).success(function(data, status, headers, config) {
                     // this callback will be called asynchronously
                     // when the response is available
-                  }).
-                  error(function(data, status, headers, config) {
+                }).error(function(data, status, headers, config) {
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                  });
-            
+                });
         }
-    
 });
 
 
 app.controller("CategoryListCtrl", function($scope, $http) {
        
-var items = [];
+  var items = [];
 
   $scope.itemsPerPage = 2;
   $scope.currentPage = 1;
@@ -208,42 +191,26 @@ var items = [];
     $scope.pagedItems = $scope.getProducts(newValue, $scope.itemsPerPage);
     
   });
-
-  
-  
-   
-
 });
 
 app.controller("addCategoryCtl", function($scope, $http) {
-        //formValidation();
-
-        $scope.createCategory = function(category) {
+    $scope.createCategory = function(category) {
         
-        
-        
-            $http({
-                   method: 'post',
-                   url:'/Category/create', 
-                   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                   data: $.param(category)
-                }).success(function(data, status, headers, config) {
-                    // this callback will be called asynchronously
-                    // when the response is available
-                  }).
-                  error(function(data, status, headers, config) {
-                    // called asynchronously if an error occurs
-                    // or server returns response with an error status.
-                  });
-            
-        }
-    
-  
-  
-   
-
+        $http({
+               method: 'post',
+               url:'/Category/create', 
+               headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+               data: $.param(category)
+          }).success(function(data, status, headers, config) {
+                // this callback will be called asynchronously
+                // when the response is available
+          }).
+          error(function(data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+          });
+    }
 });
-
 
 app.controller("addProductCtl", function($scope, $http) {
 
@@ -252,9 +219,6 @@ app.controller("addProductCtl", function($scope, $http) {
     function loadCategory() {
         $http.get("/Category/list").success(function(result){
             $scope.categoryList = result;
-            
-            $scope.product.category = "All";
-             
         }).error(function(){
             alert("Unable to load category list")
         })
@@ -262,50 +226,43 @@ app.controller("addProductCtl", function($scope, $http) {
         
     $scope.createProduct = function(product) {
          $http({
-                   method: 'post',
-                   url:'/Product/create', 
-                   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                   
-                    data: $.param(product)
-                }).success(function(data, status, headers, config) {
-                    // this callback will be called asynchronously
-                    // when the response is available
-                  }).
-                  error(function(data, status, headers, config) {
-                    // called asynchronously if an error occurs
-                    // or server returns response with an error status.
-                  });
-            
+	           method: 'post',
+	           url:'/Product/create', 
+	           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	           
+	            data: $.param(product)
+	        }).success(function(data, status, headers, config) {
+	            // this callback will be called asynchronously
+	            // when the response is available
+	        }).
+	          error(function(data, status, headers, config) {
+	            // called asynchronously if an error occurs
+	            // or server returns response with an error status.
+	        });
         }
-
 });
 
 app.controller("PaginationCtrl", function($scope, $http) {
-var items = [];
-
-
-
-
-  $scope.itemsPerPage = 2;
+  var items = [];
+  $scope.itemsPerPage = 5;
   $scope.currentPage = 1;
   $scope.totalCount =0;
   $scope.totalPageCount = 0;
   
    $scope.importProduct = function() {
-  alert();
-                $http({
-                   method: 'post',
-                   url:'/Product/import', 
-                   headers: {'Content-Type': 'application/CSV'}
-                }).success(function(data, status, headers, config) {
-                    // this callback will be called asynchronously
-                    // when the response is available
-                  }).
-                  error(function(data, status, headers, config) {
-                    // called asynchronously if an error occurs
-                    // or server returns response with an error status.
-                  });
-   }
+   alert();
+    $http({
+       method: 'post',
+       url:'/Product/import', 
+       headers: {'Content-Type': 'application/CSV'}
+    }).success(function(data, status, headers, config) {
+        // this callback will be called asynchronously
+        // when the response is available
+    }).error(function(data, status, headers, config) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+    });
+}
                 
                   
   $scope.totalCount = $http.get("/Product/count");
@@ -478,7 +435,4 @@ var items = [];
     $scope.pagedItems = $scope.getProducts(newValue, $scope.itemsPerPage);
     
   });
-  
-  
-
 });

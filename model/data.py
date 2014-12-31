@@ -1,22 +1,15 @@
-#default data for first time setup
-category = [
-    {
-        "instanceId": "All",
-        "name": "All"
-    }
-]
-
-product = [
+#default master data for first time setup
+products = [
     {
         "instanceId": "Shirt",
-        "name": "Shirt",
+        "name": "Shirt(Demo)",
         "sellingPrice": 100,
         "buyingPrice": 95,
         "quantity": 12
     },
     {
-        "instanceId": "T-Shirt",
-        "name": "T-Shirt",
+        "instanceId": "Pant",
+        "name": "Pant(Demo)",
         "sellingPrice": 120,
         "buyingPrice": 110,
         "quantity": 12

@@ -174,13 +174,12 @@
 				<ul  class="nav nav-pills">
 					<li style="width: 170px; height: 74px;" class="active" 
 					ng-repeat="product in selectedProductCategary | filter:searchText | filter:{name: selectedCategory.name}"
-					ng-click="handleClick(product)"><a  href="#tab1" >
-					<span class="prdDisplayBoxName">{{ product.name | uppercase }}</span>  
-					<span class="prdDisplayBoxPrice">Rs. {{ product.sellingPrice }}</span>
-					
+					ng-click="handleClick(product)">
+					<a  href="#tab1" >
+					   <span class="prdDisplayBoxName">{{ product.name | uppercase }}</span>  
+					   <span class="prdDisplayBoxPrice">Rs. {{ product.sellingPrice }}</span>
 					</a>
-					
-					 </li>
+					</li>
 				</ul>
 				
 				

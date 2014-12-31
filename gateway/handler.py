@@ -4,7 +4,7 @@ import importlib
 import datetime
 import base64
 
-from model import User, Store
+from model import User, Store, Product
 from auth.cookies import Cookies
 from controller.util import id_generator, send_confirmation_mail
 from auth.authutil import process_auth
@@ -23,17 +23,31 @@ class BaseHandler(webapp2.RequestHandler):
     def set_user(self, userId):
         user = self.session.get(User, userId, True)
         #for first time to create anaonymous user
-        if user == None and userId == "anonymous@erpfog.com":
-            storeId = "erpfog"
-            store = self.session.create(Store, {"instanceId": storeId, "adminUser": userId, "store": storeId})
-            user = self.session.create(User, {"instanceId": userId, "store": storeId})
-            self.__commit__()
-        elif user == None:
-            raise Exception("User with the Id %s not found"%userId)
+        if user == None:
+            if userId == "anonymous@erpfog.com":
+                self.__first_time_setup__(userId)
+            else:
+                raise Exception("User with the Id %s not found"%userId)
+        else:
+            self.user = user.to_dict()
+            #setting the user back in session to achieve multi-tenancy
+            self.session.set_user(self.user)
+        
+    def __first_time_setup__(self, userId):
+        #add default store and user
+        storeId = "erpfog"
+        self.session.create(Store, {"instanceId": storeId, "adminUser": userId, "store": storeId})
+        user = self.session.create(User, {"instanceId": userId, "store": storeId})
         self.user = user.to_dict()
-        #setting the user back in session to achieve multi-tenancy
         self.session.set_user(self.user)
         
+        #add default products
+        from model.data import products
+        for product in products:
+            self.session.create(Product, product)
+            
+        self.__commit__()
+    
     def render_signup(self):
         self.response.out.write(render_template('signup.html', {"request": self.request}))
         
