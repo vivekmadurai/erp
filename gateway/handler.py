@@ -98,7 +98,7 @@ class BaseHandler(webapp2.RequestHandler):
         self.redirect("/signin?error=Invalid username and password")
         
     def my_account(self):
-        self.response.out.write(render_template('my_account.html', {"user": self.user, "base64": base64}))
+        self.response.out.write(render_template('myaccount.html', {"user": self.user, "base64": base64}))
         
     def render_logout(self):
         cookies = Cookies(self)
