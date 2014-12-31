@@ -1,0 +1,36 @@
+<dialog id="editCategoryWindow">  
+    <div ng-include="'/static/views/category.form.html'"></div>
+</dialog>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Edit</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="category in categories">
+      <td>{{category.name}}</td>
+      <td><a href="#" ng-click="openEditCategorywindow(category.instanceId)">Edit</a>
+    </tr>
+  </tbody>
+  <tfoot>
+     <td colspan="5" align="center">
+        <div align="center">
+            <ul class="pager">
+              <li ng-class="prevPageDisabled()">
+                <a href ng-click="prevPage()">« Prev</a>
+              </li>
+              <li ng-repeat="n in range()" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
+                <a href="#">Page {{currentPage}} of {{totalPageCount}}</a>
+              </li>
+              <li ng-class="nextPageDisabled()">
+                <a href ng-click="nextPage()">Next »</a>
+              </li>
+            </ul>
+         </div>
+    </td>
+  </tfoot>
+</table>
