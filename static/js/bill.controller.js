@@ -22,18 +22,15 @@ posApp.controller('ProductController', function($scope, $http, sharedService, $f
     $scope.val = "test";
     if (productData){
         $scope.products = JSON.parse(productData);
+        $scope.selectedProductCategary  = $scope.products;
     } else {
          loadProducts();
     }
 	
-	if(typeof($scope.selectedProductCategary) == "undefined"){
-	
-	$scope.selectedProductCategary  = $filter('filter')($scope.products, { categoryId: 1 });
-	}
- 
     function loadProducts() {
         $http.get("/Product/list").success(function(result){
             $scope.products = result;
+            $scope.selectedProductCategary  = $scope.products;
             localStorage.setItem("productList", JSON.stringify(result));
         }).error(function(){
             alert("Unable to load products")
@@ -46,9 +43,39 @@ posApp.controller('ProductController', function($scope, $http, sharedService, $f
         
     $scope.$on('handleBroadcast', function(event, args) {
 		if(args.name == "category"){
-			$scope.selectedProductCategary  = $filter('filter')($scope.products, { categoryId: sharedService.resource.category.intanceId });
+		    if(sharedService.resource.category.name == "All") {
+		      $scope.selectedProductCategary  = $scope.products;
+		    } else {
+		      $scope.selectedProductCategary  = $filter('filter')($scope.products, { category: sharedService.resource.category.name });
+		    }
+			
 		}
 	}); 
+});
+
+posApp.controller('CategoryController', function($scope, $http, sharedService) {
+
+    var categoryList = localStorage.getItem("categoryList");
+    
+    if (categoryList){
+        $scope.categoryList = JSON.parse(categoryList);
+    } else {
+         loadCategoryList();
+    }
+    
+    function loadCategoryList() {
+        $http.get("/Category/list").success(function(result){
+            result.unshift({instanceId: null, name: "All"})
+            $scope.categoryList = result;
+            localStorage.setItem("categoryList", JSON.stringify(result));
+        }).error(function(){
+            alert("Unable to load categoryList")
+        })
+    }
+    
+    $scope.displayProductsForCategory = function(category) {
+        sharedService.prepForBroadcast("category", category);      
+    };
 });
 
 posApp.controller('BillController', function($scope, $http, sharedService) {
@@ -161,28 +188,4 @@ posApp.controller('BillController', function($scope, $http, sharedService) {
         $scope.selectedReport = report;
         $scope.currentBill = null;
     }
-});
-
-posApp.controller('CategoryController', function($scope, $http, sharedService) {
-
-var categoryList = localStorage.getItem("categoryList");
-	
-	if (categoryList){
-        $scope.categoryList = JSON.parse(categoryList);
-    } else {
-         loadCategoryList();
-    }
-    
-    function loadCategoryList() {
-        $http.get("/Category/list").success(function(result){
-            $scope.categoryList = result;
-            localStorage.setItem("categoryList", JSON.stringify(result));
-        }).error(function(){
-            alert("Unable to load categoryList")
-        })
-    }
-	
-	$scope.displayProductsForCategory = function(category) {
-        sharedService.prepForBroadcast("category", category);	   
-    };
 });
