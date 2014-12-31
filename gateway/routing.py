@@ -12,12 +12,6 @@ mapper.connect("/myAccount", controller="main", action="my_account")
 mapper.connect("/logout", controller="main", action="render_logout")
 mapper.connect("/report", controller="main", action="render_report")
 mapper.connect("/inventory", controller="main", action="render_inventory")
-mapper.connect("/addProduct", controller="main", action="add_product")
-mapper.connect("/addCategory", controller="main", action="add_category")
-mapper.connect("/categoryList", controller="main", action="render_category")
-mapper.connect("/editProduct", controller="main", action="edit_product")
-
-
 
 mapper.connect("/{modelName}/list", controller="main", action="list")
 mapper.connect("/{modelName}/list/p{pageNumber}/{pageCount}", controller="main", action="list")

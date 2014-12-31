@@ -114,21 +114,6 @@ class BaseHandler(webapp2.RequestHandler):
     def render_inventory(self):
         self.response.out.write(render_template('inventory.html', {"user": self.user}))
         
-    def add_product(self):
-        self.response.out.write(render_template('addProduct.html', {"user": self.user}))
-        
-    def all_product(self):
-        self.response.out.write(render_template('allProduct.html', {"user": self.user}))
-    
-    def add_category(self):
-        self.response.out.write(render_template('addCategory.html', {"user": self.user}))     
-
-    def render_category(self):
-        self.response.out.write(render_template('categoryList.html', {"user": self.user}))             
-    
-    def edit_product(self):
-        self.response.out.write(render_template('editProduct.html', {"user": self.user}))     
-    
     def get_list(self, modelName):
         from model.products import productList
         import json

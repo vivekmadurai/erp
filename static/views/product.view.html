@@ -1,0 +1,51 @@
+<div  class="tab-pane" id="viewProduct" >             
+    <form method="post" name="productForm" >
+        <div class="form-group col-md-6" >
+            <label for="Name">Product Name:</label>
+            {{product.name}}
+        </div>
+        <div class="form-group col-md-6">
+            <label for="EAN13">EAN13:</label>
+            {{product.ean13}}
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Category">Category:</label>
+            {{product.category}}
+        </div>
+        <div class="form-group col-md-6">
+            <label for="ExpDate">Expire Date:</label>
+            {{product.expDate}}
+        </div>
+        <div class="form-group col-md-6">
+            <label for="validate-phone">Buying Price:</label>
+            {{product.buyingPrice}}
+        </div>
+        <div class="form-group col-md-6">
+            <label for="validate-length">Selling Price:</label>
+            {{product.sellingPrice}}
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Discount">Discount:</label>
+            {{product.discount}}
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Quantity">Quantity:</label>
+            {{product.quantity}}
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Reorder">Reorder Level:</label>
+            {{product.reorder}}
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Location">Location:</label>
+            {{product.location}}
+        </div>
+        <div class="form-group col-md-12">
+            <label for="Description">Product Description:</label>
+            {{product.description}}
+        </div>
+        <div class="form-group col-md-12" align='center'>
+            <a href="#" class="btn btn-info  btn-lg" ng-click="closeView()">Close</a>
+        </div>
+   </form>
+</div>
