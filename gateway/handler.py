@@ -114,6 +114,9 @@ class BaseHandler(webapp2.RequestHandler):
     def render_inventory(self):
         self.response.out.write(render_template('inventory.html', {"user": self.user}))
         
+    def render_master(self):
+        self.response.out.write(render_template('master.html', {"user": self.user}))
+        
     def get_list(self, modelName):
         from model.products import productList
         import json

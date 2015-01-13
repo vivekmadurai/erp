@@ -1,0 +1,40 @@
+<dialog id="editProductWindow">  
+    <div ng-include="'/static/views/product.form.html'"></div>
+</dialog>
+   
+<dialog id="viewProductWindow">
+    <div ng-include="'/static/views/product.view.html'"></div>
+</dialog>
+
+<div infinite-scroll="invokeLoadCustomers()" infinite-scroll-distance='2'>
+	<table class="table" >
+	  <thead>
+	    <tr>
+	      <th>Name</th>
+	      <th>Email Id</th>
+	      <th>Phone Number</th>
+	      <th>Honour Points</th>
+	      <th>Edit/Delete</th>
+	    </tr>
+	  </thead>
+	  <tbody >
+	  
+	    
+	    <tr ng-repeat="customer in customers track by $index" >
+	      <td>{{customer.firstName}} {{customer.lastName}}</td>
+	      <td>{{customer.emailId}}</td>
+	      <td>{{customer.phoneNumber}}</td>
+	      <td>{{customer.honour}}</td>
+	      <td><a href="#" ng-click="openwindow(customer.instanceId)">Edit</a>
+	      <a href="#" ng-click="openViewProductWindow(customer.instanceId)">View</a></td>
+	    </tr>
+	  </tbody>
+	 
+	</table>
+	
+	
+	
+</div>
+
+
+        

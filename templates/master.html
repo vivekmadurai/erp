@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <meta name="description" content="">
+	    <meta name="author" content="">
+	    <link rel="icon" href="../../favicon.ico">
+	
+	    <title>ERPFOG - POS</title>
+	
+	    <!-- Bootstrap core CSS -->
+	    <link href="../static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../static/css/simple-sidebar.css" rel="stylesheet">
+		<link href="../static/css/custom.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse " role="navigation">
+       <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">POS</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="/home">Home</a></li>
+            <li><a href="/report">Report</a></li>
+            <li><a href="#inventory">Inventory</a></li>
+            <li><a href="#user">User</a></li>
+            <li class="active"><a href="#master">Master</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Welcome, {{ user.get('instanceId') }} <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">My Account</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="/logout">logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav> 
+    {% raw %}
+    <div class="container" id="wrapper" ng-app="POSApp" >  
+    
+         <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Start Bootstrap
+                    </a>
+                </li>
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#">Shortcuts</a>
+                </li>
+                <li>
+                    <a href="#">Overview</a>
+                </li>
+                <li>
+                    <a href="#">Events</a>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="#">Services</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div role="tabpanel" class="masterContent">
+	       <!-- Nav tabs -->
+	       <!-- Tab panes -->
+	        <div>
+	           <div id="master" class="tab-content" ng-controller="MasterCtrl">
+	              <div class="tab-pane active">
+                    <ul class="nav nav-tabs masterUL">
+	                  <li ng-repeat="tab in ['Customers', 'Suppliers', 'Employee']" ng-class="selectedTab == tab?'active':''">
+	                   <a href="#{{tab}}" ng-click="setSelectedTab(tab)">{{tab}}</a>
+	                  </li>
+                    </ul>
+	              </div>
+	              <div id="tabcontrol" ng-view></div>
+	           </div>
+            </div>
+        </div>
+    </div>
+    {% endraw %}
+    </body>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../static/lib/jquery/jquery-2.1.1.min.js"></script>
+    <script src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../static/lib/underscore.min.js"></script>
+    <script src="../static/lib/angular/angular.min.js"></script>
+    <script src="../static/lib/angular/angular-route.min.js"></script>
+    <script src="../static/lib/ng-infinite-scroll.js"></script>
+        
+    <script src="../static/js/master.controller.js"></script>
+    <script src="../static/js/formValidation.js"></script>
+</html>

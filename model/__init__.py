@@ -72,7 +72,11 @@ class StoreSubscription(POS):
     pass
 
 class Customer(POS):
-    pass
+    firstName = ndb.StringProperty()
+    lastName = ndb.StringProperty()
+    emailId = ndb.StringProperty()
+    phoneNumber = ndb.IntegerProperty()
+    honour  = ndb.IntegerProperty()
 
 class User(POS):
     firstName = ndb.StringProperty()
