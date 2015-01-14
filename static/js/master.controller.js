@@ -87,11 +87,20 @@ app.controller("CustomerCtrl", function($scope, $http, $filter) {
 	result = null;
 	$scope.currentPage = 0;
 	this.busy = false;
+	//document.getElementById('addCustomerDialogue').close();  
+	
+	
+	$scope.addCustomer = function() {
 
-	// __init__ methods
+		
+		alert(document.getElementById('addCustomerDialogue'));
+		 document.getElementById('sampledialog').show();  
+	}
+	
+	
 	$scope.invokeLoadCustomers = function() {
 
-		// $scope.currentPage++;
+	
 
 		$scope.loadCustomers(1000);
 	}

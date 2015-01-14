@@ -1,35 +1,73 @@
 
-<div infinite-scroll="invokeLoadCustomers()" infinite-scroll-distance='0' infinite-scroll-disabled='CustomerCtrl.busy'>
-	<table class="table" >
-	  <thead>
-	    <tr>
-	      <th>Name</th>
-	      <th>Email Id</th>
-	      <th>Phone Number</th>
-	      <th>Honour Points</th>
-	      <th>Edit/Delete</th>
-	    </tr>
-	  </thead>
-	  <tbody >
-	  
-	    
-	    <tr ng-repeat="customer in customers track by $index" >
-	      <td>{{customer.firstName}} {{customer.lastName}}</td>
-	      <td>{{customer.emailId}}</td>
-	      <td>{{customer.phoneNumber}}</td>
-	      <td>{{customer.honour}}</td>
-	      <td><a href="#" ng-click="openwindow(customer.instanceId)">Edit</a>
-	      <a href="#" ng-click="openViewProductWindow(customer.instanceId)">View</a></td>
-	    </tr>
-	  </tbody>
-	 
+<div infinite-scroll="invokeLoadCustomers()"
+	infinite-scroll-distance='0'
+	infinite-scroll-disabled='CustomerCtrl.busy'>
+
+	<table width=100% >
+		<tr>
+			<td>
+				<h3>Customer</h3>
+			</td>
+			<td align="right">
+			
+			 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-ok"></span>
+		          Add Customer
+		    </button>
+			
+			</td>
+		</tr>
 	</table>
 	
-	    <div ng-show='CustomerCtrl.busy'>Loading data...</div>
 	
 	
-	
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Create New Customer</h4>
+	      </div>
+	      <div class="modal-body">
+	           <div ng-include="'/static/views/product.form.html'"></div>  
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>    
+    
+	<table class="table tableheader table-striped table-bordered">
+		<thead>
+			<tr >
+				<th>Name</th>
+				<th>Email Id</th>
+				<th>Phone Number</th>
+				<th>Honour Points</th>
+				<th>Edit/Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+
+
+			<tr ng-repeat="customer in customers track by $index">
+				<td>{{customer.firstName}} {{customer.lastName}}</td>
+				<td>{{customer.emailId}}</td>
+				<td>{{customer.phoneNumber}}</td>
+				<td>{{customer.honour}}</td>
+				<td><a href="#" ng-click="openwindow(customer.instanceId)">Edit</a>
+					<a href="#" ng-click="openViewProductWindow(customer.instanceId)">View</a></td>
+			</tr>
+		</tbody>
+
+	</table>
+
+	<div ng-show='CustomerCtrl.busy'>Loading data...</div>
+
+
+
 </div>
 
 
-        

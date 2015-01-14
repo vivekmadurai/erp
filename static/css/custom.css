@@ -12,6 +12,19 @@
 	margin-top: 0px;
 }
 
+table.tableheader th{
+	
+	text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+	border: 1px solid #525252;
+	height: 28px;
+	line-height: 16px;
+	border-bottom: 1px solid #333;
+	padding: 2px 7px;
+	color: white;
+	font-weight: bold;
+	background-image: linear-gradient(#888,#545454);
+
+}
 .masterContent {
 	margin-top: 55px;
 }
@@ -106,3 +119,4 @@ dialog {
 	background-color: rgb(217, 83, 79);
 	border-color: rgb(212, 63, 58);
 }
+
