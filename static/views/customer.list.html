@@ -1,12 +1,5 @@
-<dialog id="editProductWindow">  
-    <div ng-include="'/static/views/product.form.html'"></div>
-</dialog>
-   
-<dialog id="viewProductWindow">
-    <div ng-include="'/static/views/product.view.html'"></div>
-</dialog>
 
-<div infinite-scroll="invokeLoadCustomers()" infinite-scroll-distance='2'>
+<div infinite-scroll="invokeLoadCustomers()" infinite-scroll-distance='0' infinite-scroll-disabled='CustomerCtrl.busy'>
 	<table class="table" >
 	  <thead>
 	    <tr>
@@ -31,6 +24,8 @@
 	  </tbody>
 	 
 	</table>
+	
+	    <div ng-show='CustomerCtrl.busy'>Loading data...</div>
 	
 	
 	

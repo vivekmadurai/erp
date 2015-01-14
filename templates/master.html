@@ -17,7 +17,7 @@
   </head>
   <body>
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse " role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
        <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -34,7 +34,7 @@
             <li><a href="/report">Report</a></li>
             <li><a href="#inventory">Inventory</a></li>
             <li><a href="#user">User</a></li>
-            <li class="active"><a href="#master">Master</a></li>
+            <li class="active"><a href="#master" >Master</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -91,8 +91,8 @@
 	        <div>
 	           <div id="master" class="tab-content" ng-controller="MasterCtrl">
 	              <div class="tab-pane active">
-                    <ul class="nav nav-tabs masterUL">
-	                  <li ng-repeat="tab in ['Customers', 'Suppliers', 'Employee']" ng-class="selectedTab == tab?'active':''">
+                    <ul class="nav nav-tabs">
+	                  <li ng-repeat="tab in ['Customers', 'Employees']" ng-class="selectedTab == tab?'active':''">
 	                   <a href="#{{tab}}" ng-click="setSelectedTab(tab)">{{tab}}</a>
 	                  </li>
                     </ul>

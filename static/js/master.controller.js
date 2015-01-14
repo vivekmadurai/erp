@@ -4,30 +4,80 @@ app.config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/Customers', {
 		templateUrl : 'static/views/customer.list.html',
 		controller : 'CustomerCtrl'
-	}).when('/Add Product', {
-		templateUrl : 'static/views/product.form.html',
-		controller : 'ProductCtrl'
-	}).
+	}).when('/Employees', {
+		templateUrl : 'static/views/employee.list.html',
+		controller : 'EmployeeCtrl'
+	})
 
-	when('/Category List', {
-		templateUrl : 'static/views/category.list.html',
-		controller : 'CategoryListCtrl'
-	}).when('/Add Category', {
-		templateUrl : 'static/views/category.form.html',
-		controller : 'CategoryCtrl'
-	}).otherwise({
+	.otherwise({
 		redirectTo : '/Customers'
 	});
 } ]);
 
-app.controller("MasterCtrl", function($scope, $http) {
-	$scope.selectedTab = "Customers";
 
+
+
+app.controller("MasterCtrl", function($scope, $http) {
+	
+	$scope.selectedTab ='Customers';
+	
 	$scope.setSelectedTab = function(tabName) {
 		$scope.selectedTab = tabName;
 	}
 
 });
+
+app.controller("EmployeeCtrl", function($scope, $http) {
+	$scope.employees = [];
+	result = null;
+	$scope.currentPage = 0;
+	this.busy = false;
+
+	// __init__ methods
+	$scope.invokeLoadEmployees = function() {
+
+		// $scope.currentPage++;
+
+		$scope.loadEmployees(1000);
+	}
+
+	$scope.loadEmployees = function(limit) {
+
+		if (this.busy)
+			return;
+		this.busy = true;
+		$scope.selectedTab = 'Employees';
+		
+		$scope.currentPage++;
+
+		$http.get("/User/list/p" + $scope.currentPage + "/" + limit)
+				.success(function(result) {
+
+					for (var index = 0; index < result.length; index++) {
+
+						$scope.employees.push(result[index]);
+					}
+
+					
+
+				}).error(function() {
+					alert("Unable to load Employee")
+				})
+
+		this.busy = false;
+
+		
+	};
+
+	$scope.openwindow = function(productId) {
+		$scope.product = $filter('filter')($scope.products, {
+			instanceId : productId
+		})
+		document.getElementById('editProductWindow').show();
+	}
+
+});	
+
 
 app.controller("CustomerCtrl", function($scope, $http, $filter) {
 
@@ -36,45 +86,45 @@ app.controller("CustomerCtrl", function($scope, $http, $filter) {
 	$scope.customer = null;
 	result = null;
 	$scope.currentPage = 0;
+	this.busy = false;
 
 	// __init__ methods
 	$scope.invokeLoadCustomers = function() {
 
-		$scope.currentPage++;
+		// $scope.currentPage++;
 
-		$scope.loadCustomers($scope.currentPage, 15);
+		$scope.loadCustomers(1000);
 	}
 
-	$scope.loadCustomers = function(offset, limit) {
+	$scope.loadCustomers = function(limit) {
 
-		$scope.result = $http.get("/Customer/list/p" + offset + "/" + limit);
-		$scope.result.then(function(data) {
-			//$scope.customers = data.data;
+		if (this.busy)
+			return;
+		this.busy = true;
+		$scope.selectedTab = 'Customers';
+		
+		
 
-			//$scope.customers.unshift(data.data);
-			
-			//var vCustomers = data.data;
+		$scope.currentPage++;
 
-			for (var index = 0; index < data.data.length; index++) { 
-				 
-				$scope.customers.push(data.data[index]); 
-			}
-			
-			//$scope.customers.push(customers);
+		$http.get("/Customer/list/p" + $scope.currentPage + "/" + limit)
+				.success(function(result) {
 
-		}, function(data) {
-			// error handling should go here
-			window.alert('err' + data);
-		});
+					for (var index = 0; index < result.length; index++) {
 
-		/*
-		 * $http.get("/Customer/list/p" + offset + "/" + limit).success(
-		 * function(result) { var vCustomer = result; // $scope.customers =
-		 * result; for (var i = 1; i <= vCustomer.length; i++) { //
-		 * alert(vCustomer[i]) $scope.customers.push(vCustomer[i]); }
-		 * 
-		 * }).error(function() { alert("Unable to load Customers") })
-		 */
+						$scope.customers.push(result[index]);
+					}
+
+					
+
+				}).error(function() {
+					$scope.products = null;
+					alert("Unable to load Customer")
+				})
+
+		this.busy = false;
+
+		
 	};
 
 	$scope.openwindow = function(productId) {

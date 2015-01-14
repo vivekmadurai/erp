@@ -19,6 +19,7 @@
 }
 
 #sidebar-wrapper {
+    margin-top: 50px;
     z-index: 1000;
     position: fixed;
     left: 200px;
