@@ -75,8 +75,8 @@ class Customer(POS):
     firstName = ndb.StringProperty()
     lastName = ndb.StringProperty()
     emailId = ndb.StringProperty()
-    phoneNumber = ndb.IntegerProperty()
-    honour  = ndb.IntegerProperty()
+    phoneNumber = ndb.StringProperty()
+    honour  = ndb.FloatProperty()
 
 class User(POS):
     firstName = ndb.StringProperty()

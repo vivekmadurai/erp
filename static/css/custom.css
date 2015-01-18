@@ -12,9 +12,14 @@
 	margin-top: 0px;
 }
 
-table.tableheader th{
-	
-	text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+li.sidebarActive {
+	background-color: #ddd;
+	font: bold;
+	color: black;
+}
+
+table.tableheader th {
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
 	border: 1px solid #525252;
 	height: 28px;
 	line-height: 16px;
@@ -22,25 +27,22 @@ table.tableheader th{
 	padding: 2px 7px;
 	color: white;
 	font-weight: bold;
-	background-image: linear-gradient(#888,#545454);
-
+	background-image: linear-gradient(#888, #545454);
 }
+
 .masterContent {
 	margin-top: 55px;
 }
 
 .scrolabe-table {
-    max-height: 400px;
-    overflow: auto;
-    list-style-type: none;
-    
+	max-height: 400px;
+	overflow: auto;
+	list-style-type: none;
 }
 
-
-
 .navbar {
-margin-bottom: 0px !important;
-border-radius: 0px !important;
+	margin-bottom: 0px !important;
+	border-radius: 0px !important;
 }
 
 dialog {
@@ -116,7 +118,18 @@ dialog {
 
 .input-group-addon.danger {
 	color: rgb(255, 255, 255);
-	background-color: rgb(217, 83, 79);
+	background-color: orange;
 	border-color: rgb(212, 63, 58);
 }
 
+.modal-body {
+	padding: 0px !important;
+}
+
+.modal-header { .
+	margin-bottom: 0px !important;
+}
+
+.help{
+	color: orange;
+}

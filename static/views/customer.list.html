@@ -1,5 +1,5 @@
 
-<div infinite-scroll="invokeLoadCustomers()"
+<div ng-controller='CustomerCtrl'  infinite-scroll="invokeLoadCustomers()"
 	infinite-scroll-distance='0'
 	infinite-scroll-disabled='CustomerCtrl.busy'>
 
@@ -10,18 +10,17 @@
 			</td>
 			<td align="right">
 			
-			 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-ok"></span>
+			 <button type="button"  class="btn btn-success" data-toggle="modal" data-target="#addCustomerModal"><span class="glyphicon glyphicon-ok"></span>
 		          Add Customer
 		    </button>
 			
+			<a href="#"  class="btn btn-success" data-toggle="modal" data-target="#addCustomerModal"> Add Customer</a>
 			</td>
 		</tr>
 	</table>
 	
-	
-	
 	<!-- Modal -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="addCustomerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -29,11 +28,16 @@
 	        <h4 class="modal-title" id="myModalLabel">Create New Customer</h4>
 	      </div>
 	      <div class="modal-body">
-	           <div ng-include="'/static/views/product.form.html'"></div>  
+	            
+                <div ng-include="'/static/views/customer.form.html'"></div>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
+	         <div class="input-group col-md-3" >
+        
+		        <span class="input-group-addon danger glyphicon glyphicon-remove"></span>
+		        Mandatory Field
+		     </div>
+	       
 	      </div>
 	    </div>
 	  </div>
@@ -65,9 +69,13 @@
 	</table>
 
 	<div ng-show='CustomerCtrl.busy'>Loading data...</div>
-
+    
+  
 
 
 </div>
 
+<script>
+
+</script>
 
