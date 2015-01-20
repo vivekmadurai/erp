@@ -85,4 +85,4 @@ class User(POS):
     password = ndb.StringProperty()
     emailId = ndb.StringProperty()
     role = ndb.StringProperty()#we have Admin, Manager and User(default)
-    phoneNumber = ndb.IntegerProperty()
+    phoneNumber = ndb.StringProperty() #Phone should accept space, hypen, etc

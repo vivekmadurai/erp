@@ -65,6 +65,21 @@
 			ng-show="employeeForm.phoneNumber.$invalid && employeeForm.phoneNumber.$dirty">
 			Please enter valid 10 digit phone number. Eg., 814-555-1234</div>
 	</div>
+	
+	<div class="form-group col-md-12">
+        <label for="role">Role</label>
+    
+    
+	    <div class="input-group">	
+		   <select  class="form-control"  ng-model="User.role" ng-init="User.role='User'">                
+	                <option value="User">Only Sales</option>
+	                <option value="Admin">Admin</option>
+	                <option value="Admin">Manager</option>     
+	       </select>
+	       <span class="input-group-addon  glyphicon glyphicon-remove"></span>
+	    </div>
+    
+    </div>
 
 
 	<div class="form-group col-md-12" align='center'>

@@ -46,18 +46,18 @@
 		<thead>
 			<tr>
 				<th>Name</th>
-				<th>Email Id</th>
+				<th>Login Id (Email Id)</th>
 				<th>Phone Number</th>
-				<th>Honour Points</th>
+				<th>Role</th>
 				<th>Edit/Delete</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="employee in employees track by $index">
 				<td>{{employee.firstName}} {{employee.lastName}}</td>
-				<td>{{employee.emailId}}</td>
+				<td>{{employee.name}}</td>
 				<td>{{employee.phoneNumber}}</td>
-				<td>{{employee.honour}}</td>
+				<td>{{employee.role}}</td>
 				<td><a href="#" ng-click="openwindow(customer.instanceId)">Edit</a>
 					<a href="#" ng-click="openViewProductWindow(customer.instanceId)">View</a></td>
 			</tr>
