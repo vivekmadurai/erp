@@ -110,7 +110,7 @@ app.controller("EmployeeCtr1", function($scope, $http, $window, $location, $rout
 			$window.alert("Employee information is persisted successfully")
 			$('#addEmployeeModal').modal('hide');
 
-			//Loading Employee section alone.. No full page reload
+			// Loading Employee section alone.. No full page reload
 			$location = $window.location.origin + '/master#/Employees';			
 			$route.reload();
 			
@@ -180,7 +180,7 @@ app.controller("CustomerCtrl", function($scope, $http, $window, $route) {
 			$window.alert("Customer information is persisted successfully")
 			$('#addCustomerModal').modal('hide');
 
-			//Loading Employee section alone.. No full page reload
+			// Loading Employee section alone.. No full page reload
 			$location = $window.location.origin + '/master#/Customers';			
 			$route.reload();
 			
@@ -196,23 +196,36 @@ app.controller("CustomerCtrl", function($scope, $http, $window, $route) {
 	 * checked in later release.
 	 */
 
-	/*
-	 * $scope.createCustomerAndSaveAnother = function(customer){ $http({ method :
-	 * 'post', url : '/Customer/create', headers : { 'Content-Type' :
-	 * 'application/x-www-form-urlencoded' }, data : $.param(customer)
-	 * }).success(function(data, status, headers, config) {
-	 * 
-	 * $scope.resetForm();
-	 * 
-	 * 
-	 *  // May be need to look for better approach.. as this method refresh the
-	 * page. //$window.location = 'static/views/customer.form.html';
-	 * 
-	 * }).error(function(data, status, headers, config) {
-	 * $window.alert("Customer is not persisted") });
-	 * //$scope.resetForm($scope.customerForm); }
-	 * 
-	 * $scope.resetForm = function() { angular.copy({},$scope.customer); }
-	 */
+	
+	  $scope.createCustomerAndSaveAnother = function(customer){ 
+		  
+		  $scope.successMsg = "";
+		  
+		  if (!$scope.customerForm.$valid) {
+				alert("Please check the entered data.")
+				return;
+			}
+
+		  
+		  $http({method :
+			     'post', url : '/Customer/create', headers : { 'Content-Type' :
+			     'application/x-www-form-urlencoded' }, data : $.param(customer)
+				  }).success(function(data, status, headers, config) {
+				  
+					  		$scope.resetForm();
+					  		$scope.successMsg = "Customer is saved succesfully. Please save another customer"
+				  
+				  }).error(function(data, status, headers, config) {
+					  $window.alert("Customer is not persisted") });
+					  
+	  }
+	 
+	  $scope.resetForm = function() { 
+		  //angular.copy({},$scope.customer);
+		  //$scope.customer.emailId = "";
+		  $scope.customerForm.$setPristine();
+		  //angular.copy({},$scope.customerForm); 
+	  }
+	 
 
 });
