@@ -1,36 +1,74 @@
+<div infinite-scroll="invokeLoadEmployees()"
+	ng-controller='EmployeeCtr1' infinite-scroll-distance='0'
+	infinite-scroll-disabled='EmployeeCtrl.busy'>
+	<table width=100%>
+		<tr>
+			<td>
+				<h3>Employee</h3>
+			</td>
+			<td align="right">
 
+				<button type="button" class="btn btn-success" data-toggle="modal"
+					data-target="#addEmployeeModal">
+					<span class="glyphicon glyphicon-ok"></span> Add Employee
+				</button>
 
-<div infinite-scroll="invokeLoadEmployees()" ng-controller='EmployeeCtr1'  infinite-scroll-distance='0' infinite-scroll-disabled='EmployeeCtrl.busy'>
-	<table class="table" >
-	  <thead>
-	    <tr>
-	      <th>Name1</th>
-	      <th>Email Id</th>
-	      <th>Phone Number</th>
-	      <th>Honour Points</th>
-	      <th>Edit/Delete</th>
-	    </tr>
-	  </thead>
-	  <tbody >
-	  
-	    
-	    <tr ng-repeat="employee in employees track by $index" >
-	      <td>{{employee.firstName}} {{employee.lastName}}</td>
-	      <td>{{employee.emailId}}</td>
-	      <td>{{employee.phoneNumber}}</td>
-	      <td>{{employee.honour}}</td>
-	      <td><a href="#" ng-click="openwindow(customer.instanceId)">Edit</a>
-	      <a href="#" ng-click="openViewProductWindow(customer.instanceId)">View</a></td>
-	    </tr>
-	  </tbody>
-	 
+			</td>
+		</tr>
 	</table>
 	
-	    <div ng-show='EmployeeCtrl.busy'>Loading data...</div>
-	
-	
-	
+	<!-- Modal -->
+    <div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Create New Employee</h4>
+          </div>
+          <div class="modal-body">
+                
+                <div ng-include="'/static/views/employee.form.html'"></div>
+          </div>
+          <div class="modal-footer">
+             <div class="input-group col-md-3" >
+        
+                <span class="input-group-addon danger glyphicon glyphicon-remove"></span>
+                Mandatory Field
+             </div>
+           
+          </div>
+        </div>
+      </div>
+    </div>    
+    
+
+	<table class="table tableheader table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Email Id</th>
+				<th>Phone Number</th>
+				<th>Honour Points</th>
+				<th>Edit/Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="employee in employees track by $index">
+				<td>{{employee.firstName}} {{employee.lastName}}</td>
+				<td>{{employee.emailId}}</td>
+				<td>{{employee.phoneNumber}}</td>
+				<td>{{employee.honour}}</td>
+				<td><a href="#" ng-click="openwindow(customer.instanceId)">Edit</a>
+					<a href="#" ng-click="openViewProductWindow(customer.instanceId)">View</a></td>
+			</tr>
+		</tbody>
+
+	</table>
+
+	<div ng-show='EmployeeCtrl.busy'>Loading data...</div>
+
+
+
 </div>
 
 
-        

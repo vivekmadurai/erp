@@ -1,4 +1,4 @@
-var app = angular.module("POSApp", [ 'ngRoute', 'infinite-scroll']);
+var app = angular.module("POSApp", [ 'ngRoute', 'infinite-scroll' ]);
 
 app.config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/Customers', {
@@ -52,7 +52,7 @@ app.controller("MasterCtrl", function($scope, $http) {
 
 });
 
-app.controller("EmployeeCtr1", function($scope, $http) {
+app.controller("EmployeeCtr1", function($scope, $http, $window, $location, $route) {
 	$scope.employees = [];
 	result = null;
 	$scope.currentPage = 0;
@@ -91,16 +91,37 @@ app.controller("EmployeeCtr1", function($scope, $http) {
 
 	};
 
-	$scope.openwindow = function(productId) {
-		$scope.product = $filter('filter')($scope.products, {
-			instanceId : productId
-		})
-		document.getElementById('editProductWindow').show();
+	$scope.createEmployee = function(User) {
+
+		if (!$scope.employeeForm.$valid) {
+			alert("Please check the entered data.")
+			return;
+		}
+
+		$http({
+			method : 'post',
+			url : '/User/create',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			data : $.param(User)
+		}).success(function(data, status, headers, config) {
+
+			$window.alert("Employee information is persisted successfully")
+			$('#addEmployeeModal').modal('hide');
+
+			//Loading Employee section alone.. No full page reload
+			$location = $window.location.origin + '/master#/Employees';			
+			$route.reload();
+			
+		}).error(function(data, status, headers, config) {
+			$window.alert("Employee is not persisted")
+		});
 	}
 
 });
 
-app.controller("CustomerCtrl", function($scope, $http, $window, $routeParams) {
+app.controller("CustomerCtrl", function($scope, $http, $window, $route) {
 
 	$scope.customers = [];
 	$scope.currentPageCustomers = [];
@@ -108,14 +129,6 @@ app.controller("CustomerCtrl", function($scope, $http, $window, $routeParams) {
 	result = null;
 	$scope.currentPage = 0;
 	this.busy = false;
-	
-	
-	
-	$scope.addCustomer = function() {
-
-		alert(document.getElementById('addCustomerDialogue'));
-		document.getElementById('sampledialog').show();
-	}
 
 	$scope.invokeLoadCustomers = function() {
 
@@ -148,16 +161,13 @@ app.controller("CustomerCtrl", function($scope, $http, $window, $routeParams) {
 
 	};
 
-		
-	
-	$scope.createCustomer = function(customer){
-		
-		if (!$scope.customerForm.phoneNumber.$valid){
+	$scope.createCustomer = function(customer) {
+
+		if (!$scope.customerForm.$valid) {
 			alert("Please check the entered data.")
 			return;
 		}
-	
-		
+
 		$http({
 			method : 'post',
 			url : '/Customer/create',
@@ -167,50 +177,42 @@ app.controller("CustomerCtrl", function($scope, $http, $window, $routeParams) {
 			data : $.param(customer)
 		}).success(function(data, status, headers, config) {
 
-			
 			$window.alert("Customer information is persisted successfully")
 			$('#addCustomerModal').modal('hide');
+
+			//Loading Employee section alone.. No full page reload
+			$location = $window.location.origin + '/master#/Customers';			
+			$route.reload();
 			
-			
-			// May be need to look for better approach.. as this method refresh the page.
-			$window.location = 'master';
-	
+
 		}).error(function(data, status, headers, config) {
 			$window.alert("Customer is not persisted")
 		});
 	}
-	
-	
+
 	/*
-	 * Below functionality is used for save and save another. Success msg is getting retained after between form submit in dom. This need to be checked in later release.
+	 * Below functionality is used for save and save another. Success msg is
+	 * getting retained after between form submit in dom. This need to be
+	 * checked in later release.
 	 */
-	
-	/*	$scope.createCustomerAndSaveAnother = function(customer){
-	$http({
-		method : 'post',
-		url : '/Customer/create',
-		headers : {
-			'Content-Type' : 'application/x-www-form-urlencoded'
-		},
-		data : $.param(customer)
-	}).success(function(data, status, headers, config) {
 
-		$scope.resetForm();
-		
-	
-		
-		// May be need to look for better approach.. as this method refresh the page.
-		//$window.location = 'static/views/customer.form.html';
-
-	}).error(function(data, status, headers, config) {
-		$window.alert("Customer is not persisted")
-	});
-	//$scope.resetForm($scope.customerForm);
-	}
-	
-	$scope.resetForm = function() {
-	      angular.copy({},$scope.customer);
-	}
-	*/
+	/*
+	 * $scope.createCustomerAndSaveAnother = function(customer){ $http({ method :
+	 * 'post', url : '/Customer/create', headers : { 'Content-Type' :
+	 * 'application/x-www-form-urlencoded' }, data : $.param(customer)
+	 * }).success(function(data, status, headers, config) {
+	 * 
+	 * $scope.resetForm();
+	 * 
+	 * 
+	 *  // May be need to look for better approach.. as this method refresh the
+	 * page. //$window.location = 'static/views/customer.form.html';
+	 * 
+	 * }).error(function(data, status, headers, config) {
+	 * $window.alert("Customer is not persisted") });
+	 * //$scope.resetForm($scope.customerForm); }
+	 * 
+	 * $scope.resetForm = function() { angular.copy({},$scope.customer); }
+	 */
 
 });

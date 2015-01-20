@@ -34,11 +34,11 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="/home">Home</a></li>
+					<li class="active"><a href="#master">Master</a></li>
 					<li><a href="/report">Report</a></li>
 					<li><a href="/inventory">Inventory</a></li>
 
-					<li class="active"><a href="#master">Master</a></li>
+					
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -76,11 +76,22 @@
 				<!-- Tab panes -->
 				<div>
 					<div class="tab-pane active">
-						<ul class="nav nav-tabs">
+					
+					<!-- Performance is much important than anything else so moving to old age code -->
+					<!-- 	<ul class="nav nav-tabs">
 							<li ng-repeat="tab in ['Customers', 'Employees']"
 								ng-class="selectedTab == tab?'active':''"><a
 								href="#{{tab}}" ng-click="setSelectedTab(tab)">{{tab}}</a></li>
-						</ul>
+						</ul> -->
+						
+						<ul class="nav nav-tabs">
+                            <li ng-class="selectedTab == 'Customers'?'active':''"><a
+                                href="#Customers" ng-click="setSelectedTab('Customers')">Customers</a></li>
+                                
+                            <li ng-class="selectedTab == 'Employees'?'active':''"><a
+                                href="#Employees" ng-click="setSelectedTab('Employees')">Employees</a></li>
+                        </ul>
+						
 					</div>
 					<div id="tabcontrol" ng-view></div>
 
