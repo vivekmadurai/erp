@@ -1,14 +1,19 @@
 var app = angular.module("POSApp", [ 'ngRoute', 'infinite-scroll' ]);
 
+
+
+
+
 app.config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/Customers', {
 		templateUrl : 'static/views/customer.list.html',
 		controller : 'CustomerCtrl'
+		
 	}).when('/Employees', {
 		templateUrl : 'static/views/employee.list.html',
 		controller : 'EmployeeCtr1'
 	})
-	.otherwise({
+	.otherwise({		
 		redirectTo : '/Customers'
 	});
 } ]);
@@ -51,6 +56,9 @@ app.controller("MasterCtrl", function($scope, $http) {
 
 app.controller("EmployeeCtr1", function($scope, $http, $window, $location,
 		$route) {
+	
+	var initialPassword;
+	
 	$scope.employees = [];
 	result = null;
 	$scope.currentPage = 0;
@@ -89,13 +97,40 @@ app.controller("EmployeeCtr1", function($scope, $http, $window, $location,
 
 	};
 
-	$scope.createEmployee = function(User, employeeForm) {
-
+	$scope.createEmployee = function(User, employeeForm, instanceId) {
+		
+		
+		
 		if (!employeeForm.$valid) {
 			alert("Please check the entered data.")
 			return;
 		}
+		
+		//Create new Employee
+		if (instanceId == null){
+			User.instanceId = User.name;
+			$scope.invokeAddEmployee (User, employeeForm);
+		}
+		else if (instanceId != null){ //Update existing employee
+			
+			/*
+			 * Update the password only if user has updated it
+			 */
+			if (initialPassword != User.password){
+				
+				//Base64  Encoded
+				User.password = btoa(User.password);
+				
+			}
+			$scope.invokeUpdateEmployee (User, employeeForm, instanceId);
+		}
 
+		
+	}
+	
+	
+	$scope.invokeAddEmployee = function (User, employeeForm){
+		
 		$http({
 			method : 'post',
 			url : '/User/create',
@@ -115,6 +150,31 @@ app.controller("EmployeeCtr1", function($scope, $http, $window, $location,
 		}).error(function(data, status, headers, config) {
 			$window.alert("Employee is not persisted")
 		});
+		
+	}
+	
+	$scope.invokeUpdateEmployee = function (User, employeeForm, instanceId){
+		
+		$http({
+			method : 'put',
+			url : '/User/'+User.instanceId+'/update',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			data : $.param(User)
+		}).success(function(data, status, headers, config) {
+
+			$window.alert("Employee information is persisted successfully")
+			$('#addEmployeeModal').modal('hide');
+
+			// Loading Employee section alone.. No full page reload
+			$location = $window.location.origin + '/master#/Employees';
+			$route.reload();
+
+		}).error(function(data, status, headers, config) {
+			$window.alert("Employee is not persisted")
+		});
+		
 	}
 	
 	/*
@@ -165,22 +225,22 @@ app.controller("EmployeeCtr1", function($scope, $http, $window, $location,
 	
 	$scope.openEmployeeModelWindow = function(employeeRow) {
 		$scope.User = employeeRow;
+		
+		initialPassword = $scope.User.password;
 	}
 
 });
 
-app
-		.controller(
-				"CustomerCtrl",
-				function($scope, $http, $window, $route, $filter) {
-
+app.controller("CustomerCtrl",function($scope, $http, $window, $route, $filter) {
 					$scope.customers = [];
 					$scope.currentPageCustomers = [];
-					// $scope.customer = null;
-
+					
 					result = null;
 					$scope.currentPage = 0;
 					this.busy = false;
+					
+					$scope.selectedTab = 'Customers';
+					$scope.sidebarSelectedTab = 'Contacts';
 
 					$scope.invokeLoadCustomers = function() {
 
@@ -217,18 +277,64 @@ app
 						this.busy = false;
 
 					};
-
-					$scope.createCustomer = function(customer, customerForm) {
+					
+				
+					
+					$scope.createCustomer = function(customer, customerForm, customerInstanceId) {
 
 						if (!customerForm.$valid) {
 							alert("Please check the entered data.")
 							return;
 						}
+						
+						if (customerInstanceId == null){
+							$scope.invokeAddCustomer (customer, customerForm);
+						}
+						else if (customerInstanceId != null){
+							$scope.invokeUpdateCustomer (customer, customerForm, customerInstanceId);
+						}
 
+						
+					}
+					
+					$scope.invokeAddCustomer = function(customer, customerForm){
+						
 						$http(
 								{
 									method : 'post',
 									url : '/Customer/create',
+									headers : {
+										'Content-Type' : 'application/x-www-form-urlencoded'
+									},
+									data : $.param(customer)
+								})
+								.success(
+										function(data, status, headers, config) {
+
+											$window
+													.alert("Customer information is persisted successfully");
+											$('#addCustomerModal')
+													.modal('hide');
+
+											// Loading Employee section alone..
+											// No full page reload
+											$location = $window.location.origin
+													+ '/master#/Customers';
+											$route.reload();
+
+										})
+								.error(function(data, status, headers, config) {
+									$window.alert("Customer is not persisted")
+								});
+					}
+
+					
+					$scope.invokeUpdateCustomer = function(customer, customerForm, customerInstanceId){
+						
+						$http(
+								{
+									method : 'put',
+									url : '/Customer/'+customerInstanceId +'/update',
 									headers : {
 										'Content-Type' : 'application/x-www-form-urlencoded'
 									},
