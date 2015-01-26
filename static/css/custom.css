@@ -1,63 +1,90 @@
 .prdDisplayBoxPrice {
-
-font-size: 12px;
-margin-left: 40px;
-margin-bottom: 0px;
+	font-size: 12px;
+	margin-left: 40px;
+	margin-bottom: 0px;
 }
 
 .prdDisplayBoxName {
-
- display: block; 
- text-align: center; 
- word-wrap: break-word; 
- font-size: 14px;
-  margin-top: 0px;
-
+	display: block;
+	text-align: center;
+	word-wrap: break-word;
+	font-size: 14px;
+	margin-top: 0px;
 }
 
-dialog {  
-    width: 800px;  
-    
-} 
-
-.nav-pills > .active > a,
-.nav-pills > .active > a:hover,.nav-pills > li > a:hover {
-text-decoration: none;
-font-weight: bold;
-
-border-width:2px;	
-
-border-style: groove;
-    color: black !important;
-  background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#f7f7f8),color-stop(100%,#ececee));
-}
-.nav-pills > li > a{
-    border-radius:0px;
+li.sidebarActive {
+	background-color: #ddd;
+	font: bold;
+	color: black;
 }
 
-
-.billTable{
-border-color: orange !important;
+table.tableheader th {
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+	border: 1px solid #525252;
+	height: 28px;
+	line-height: 16px;
+	border-bottom: 1px solid #333;
+	padding: 2px 7px;
+	color: white;
+	font-weight: bold;
+	background-image: linear-gradient(#888, #545454);
 }
 
-.bill-scrolable-height{
-min-height:290px;
+.masterContent {
+	margin-top: 55px;
+}
+
+.scrolabe-table {
+	max-height: 400px;
+	overflow: auto;
+	list-style-type: none;
+}
+
+.navbar {
+	margin-bottom: 0px !important;
+	border-radius: 0px !important;
+}
+
+dialog {
+	width: 800px;
+}
+
+.nav-pills>.active>a, .nav-pills>.active>a:hover, .nav-pills>li>a:hover
+	{
+	text-decoration: none;
+	font-weight: bold;
+	border-width: 2px;
+	border-style: groove;
+	color: black !important;
+	background-image: -webkit-gradient(linear, 50% 0, 50% 100%, color-stop(0%, #f7f7f8),
+		color-stop(100%, #ececee));
+}
+
+.nav-pills>li>a {
+	border-radius: 0px;
+}
+
+.billTable {
+	border-color: orange !important;
+}
+
+.bill-scrolable-height {
+	min-height: 290px;
 }
 
 .pre-scrollable {
-max-height: 290px !important;
-
+	max-height: 290px !important;
 }
 
-.billControls{
-max-width: inherit;
+.billControls {
+	max-width: inherit;
 }
 
-.colorstrip{
-    width: 100%; height: 30px;
-    
-    border-color: #46b8da;
-    background-color: #5bc0de;
+.colorstrip {
+	width: 100%;
+	height: 30px;
+	border-color: #46b8da;
+	background-color: #5bc0de;
 	color: white;
 	margin-top: 7px;
 	font-size: 17px;
@@ -66,27 +93,48 @@ max-width: inherit;
 }
 
 .input-group-addon.primary {
-    color: rgb(255, 255, 255);
-    background-color: rgb(50, 118, 177);
-    border-color: rgb(40, 94, 142);
+	color: rgb(255, 255, 255);
+	background-color: rgb(50, 118, 177);
+	border-color: rgb(40, 94, 142);
 }
+
 .input-group-addon.success {
-    color: rgb(255, 255, 255);
-    background-color: rgb(92, 184, 92);
-    border-color: rgb(76, 174, 76);
+	color: rgb(255, 255, 255);
+	background-color: rgb(92, 184, 92);
+	border-color: rgb(76, 174, 76);
 }
+
 .input-group-addon.info {
-    color: rgb(255, 255, 255);
-    background-color: rgb(57, 179, 215);
-    border-color: rgb(38, 154, 188);
+	color: rgb(255, 255, 255);
+	background-color: rgb(57, 179, 215);
+	border-color: rgb(38, 154, 188);
 }
+
 .input-group-addon.warning {
-    color: rgb(255, 255, 255);
-    background-color: rgb(240, 173, 78);
-    border-color: rgb(238, 162, 54);
+	color: rgb(255, 255, 255);
+	background-color: rgb(240, 173, 78);
+	border-color: rgb(238, 162, 54);
 }
+
 .input-group-addon.danger {
-    color: rgb(255, 255, 255);
-    background-color: rgb(217, 83, 79);
-    border-color: rgb(212, 63, 58);
+	color: rgb(255, 255, 255);
+	background-color: orange;
+	border-color: rgb(212, 63, 58);
+}
+
+.modal-body {
+	padding: 0px !important;
+}
+
+.modal-header { .
+	margin-bottom: 0px !important;
+}
+
+.help{
+	color: orange;
+}
+
+.info{
+    color: green;
+	
 }

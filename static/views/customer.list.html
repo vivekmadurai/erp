@@ -1,0 +1,85 @@
+
+<div ng-controller='CustomerCtrl'
+	infinite-scroll="invokeLoadCustomers()" infinite-scroll-distance='0'
+	infinite-scroll-disabled='CustomerCtrl.busy'>
+
+	<table width=100%>
+		<tr>
+			<td>
+				<h3>Customer</h3>
+			</td>
+			<td align="right">
+
+				<button type="button" class="btn btn-success" ng-click="resetCustomerAddForm(customer)" data-toggle="modal"
+					data-target="#addCustomerModal">
+					<span class="glyphicon glyphicon-ok"></span> Add Customer
+				</button>
+
+			</td>
+		</tr>
+	</table>
+
+	<!-- Modal -->
+	<div class="modal fade" id="addCustomerModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Create New Customer</h4>
+				</div>
+				<div class="modal-body">
+					<div ng-include="'/static/views/customer.form.html'"></div> 
+				</div>
+				<div class="modal-footer">
+					<div class="input-group col-md-3">
+
+						<span class="input-group-addon danger glyphicon glyphicon-remove"></span>
+						Mandatory Field
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<table class="table tableheader table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Email Id</th>
+				<th>Phone Number</th>
+				<th>Honour Points</th>
+				<th>Edit/Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="customerRow in customers track by $index">
+				<td>{{customerRow.firstName}} {{customerRow.lastName}}</td>
+				<td>{{customerRow.emailId}}</td>
+				<td>{{customerRow.phoneNumber}}</td>
+				<td>{{customerRow.honour}}</td>
+				<td>
+					<button ng-click="openwindow(customerRow)" type="button"
+						class="btn btn-xs btn-success" data-toggle="modal" data-target="#addCustomerModal">
+						Edit</button>
+				</td>
+			</tr>
+		</tbody>
+
+	</table>
+
+	<div ng-show='CustomerCtrl.busy'>Loading data...</div>
+
+
+
+
+</div>
+
+<script>
+
+</script>
+

@@ -12,6 +12,7 @@ mapper.connect("/myAccount", controller="main", action="my_account")
 mapper.connect("/logout", controller="main", action="render_logout")
 mapper.connect("/report", controller="main", action="render_report")
 mapper.connect("/inventory", controller="main", action="render_inventory")
+mapper.connect("/master", controller="main", action="render_master")
 
 mapper.connect("/{modelName}/list", controller="main", action="list")
 mapper.connect("/{modelName}/list/p{pageNumber}/{pageCount}", controller="main", action="list")
