@@ -1,6 +1,12 @@
-<form   ng-submit="createProduct(product)"  method="post" name="productForm" >
+<form  ng-submit="createProduct(product, productForm, product.instanceId)" method="post" name="productForm" >     
+
+    <div class="form-group col-md-12" >
+        <label for="msg" class="info"><center><b>{{successMsg}}</b></center></label>             
+    </div>
+    
+   
     <div class="form-group col-md-6" >
-        <label for="Name">Product Name</label>
+        <label for="Name" >Product Name</label>
         <div class="input-group">
             <input type="text" class="form-control" name="Name" ng-model="product.name" placeholder="Product Name" required>
             <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
@@ -89,6 +95,10 @@
     </div>
     
     <div class="form-group col-md-12" align='center'>
-        <button type="submit" class="btn btn-primary">Save Product</button>
+        <button type="submit" class="btn btn-primary">Save</button>    
+        <button ng-hide="customer.instanceId" type="button" ng-click="createProductAndSaveAnother(product, productForm)" class="btn btn-primary">Save and Continue</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> 
     </div>
 </form>
+
+

@@ -138,3 +138,17 @@ dialog {
     color: green;
 	
 }
+.requiredIcon:after  {
+	content: "*";
+	color: red;
+	font-size: 14px;
+	
+}
+
+.mandatoryIcon{
+	content: "*";
+    font-size: 14px;
+    float:left;
+}
+
+

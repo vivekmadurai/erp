@@ -1,36 +1,107 @@
-<dialog id="editCategoryWindow">  
-    <div ng-include="'/static/views/category.form.html'"></div>
-</dialog>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Edit</th>
-      
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="category in categories">
-      <td>{{category.name}}</td>
-      <td><a href="#" ng-click="openEditCategorywindow(category.instanceId)">Edit</a>
-    </tr>
-  </tbody>
-  <tfoot>
-     <td colspan="5" align="center">
-        <div align="center">
-            <ul class="pager">
-              <li ng-class="prevPageDisabled()">
-                <a href ng-click="prevPage()">« Prev</a>
-              </li>
-              <li ng-repeat="n in range()" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
-                <a href="#">Page {{currentPage}} of {{totalPageCount}}</a>
-              </li>
-              <li ng-class="nextPageDisabled()">
-                <a href ng-click="nextPage()">Next »</a>
-              </li>
-            </ul>
-         </div>
-    </td>
-  </tfoot>
-</table>
+<div ng-controller='CategoryCtrl'
+	infinite-scroll="invokeLoadCategories()" infinite-scroll-distance='0'
+	infinite-scroll-disabled='CategoryCtrl.busy'>
+
+	<table width=100%>
+		<tr>
+			<td>
+				<h3>Categorys</h3>
+			</td>
+			<td align="right">
+
+				<button type="button" class="btn btn-success" ng-click="resetCategoryAddForm(category)" data-toggle="modal"
+					data-target="#addCategoryModal">
+					<span class="glyphicon glyphicon-ok"></span> Add Category
+				</button>
+
+			</td>
+		</tr>
+	</table>
+
+	<!-- Modal -->
+	<div class="modal fade" id="addCategoryModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Customer</h4>
+				</div>
+				<div class="modal-body">
+					<!-- <div ng-include="'/static/views/category.form.html'"></div>  -->
+					
+					<form  ng-submit="createCategory(category, categoryForm, category.instanceId)" method="post" name="categoryForm" >     
+
+					    <div class="form-group col-md-12" >
+					        <label for="msg" class="info"><center><b>{{successMsg}}</b></center></label>             
+					    </div>
+					   
+					   <div class="form-group col-md-12">
+					        <label for="name">Category Name</label>
+					        <div class="input-group">
+					            <input type="text" class="form-control" name="name" ng-model="category.name" placeholder="Category Name" required>
+					            <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+					        </div>
+					    </div> 
+					    <div class="form-group col-md-12" align='center'>
+					        <button type="submit" class="btn btn-primary">Save</button>    
+					        <button ng-hide="category.instanceId" type="button" ng-click="createCategoryAndSaveAnother(category, categoryForm)" class="btn btn-primary">Save and Continue</button>
+					        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> 
+					    </div>
+					</form>
+
+				</div>
+				<div class="modal-footer">
+				    
+					<div class=" col-md-1">
+                        
+                                <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+						
+					</div>
+					<div class=" col-md-7">
+                        
+                        <span class="mandatoryIcon" >Denotes Mandatory Fields</span>
+                        
+                    </div>
+                    
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<table class="table tableheader table-striped table-bordered">
+		<thead>
+			<tr>
+                <th>Category Name</th>
+                <th>Edit / Delete</th>
+				
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="category in categories track by $index">
+		       <td>{{category.name}}</td>
+		      <td>
+                    <button ng-click="openwindow(category)" type="button"
+                        class="btn btn-xs btn-success" data-toggle="modal" data-target="#addCategoryModal">
+                        Edit</button>
+                </td>
+		    </tr>
+		</tbody>
+
+	</table>
+
+	<div ng-show='CustomerCtrl.busy'>Loading data...</div>
+
+
+
+
+</div>
+
+<script>
+
+</script>
+
