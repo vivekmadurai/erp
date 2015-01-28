@@ -60,7 +60,7 @@
 					    <div class="form-group col-md-6">
 					        <label for="Category">Category</label>
 					        <div class="input-group">
-					            <select ng-model="product.category" ng-init="product.category='All'">
+					            <select class="form-control" ng-model="product.category" ng-init="product.category='All'">
 					            
 					                <option value="All">All</option>
 					
@@ -68,8 +68,7 @@
 					                    {{category.name}}
 					                </option>
 					            </select>
-					            &nbsp;
-					            <a href="#Add Category">New Category</a>
+					           
 					            <span class="input-group-addon">
 					            
 					        </div>
@@ -82,7 +81,7 @@
 					        </div>
 					    </div>
 					    <div class="form-group col-md-6">
-					        <label for="validate-phone">Buying Price</label>
+					        <label for="validate-phone" class="requiredIcon">Buying Price</label>
 					        <div class="input-group" data-validate="number">
 					            <input type="number" class="form-control" name="BuyingPrice" ng-model="product.buyingPrice" placeholder="" required>
 					            <span class="input-group-addon danger">    
@@ -143,9 +142,8 @@
 				<div class="modal-footer">
 					<div class="input-group col-md-12">
 
-						<span class="requiredIcon"></span>
-						                              <span class="input-group-addon danger">
-						Denotes Mandatory Fields
+						<span class="requiredIcon">Denotes Mandatory Fields</span>
+						
 					</div>
 
 				</div>

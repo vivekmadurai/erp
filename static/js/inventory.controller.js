@@ -2,7 +2,7 @@ var app = angular.module("POSApp", [ 'ngRoute', 'infinite-scroll' ]);
 
 app.config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/Products', {
-		templateUrl : 'static/views/category.list.html',
+		templateUrl : 'static/views/product.list.html',
 		controller : 'ProductCtrl'
 
 	}).when('/Categories', {

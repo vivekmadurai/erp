@@ -1,0 +1,80 @@
+
+<div ng-controller='InventoryQuantityCtr1'
+	infinite-scroll="invokeLoadProducts()" infinite-scroll-distance='0'
+	infinite-scroll-disabled='InventoryQuantityCtr1.busy'>
+
+	<table width=100%>
+		<tr>
+			<td>
+				<h3>Inventory - Stocking</h3>
+			</td>
+			<td align="right">
+
+				<button type="button" class="btn btn-success"
+					ng-click="resetProductAddForm(product)" data-toggle="modal"
+					data-target="#addProductModal">
+					<span class="glyphicon glyphicon-ok"></span> Add Product
+				</button>
+
+			</td>
+		</tr>
+	</table>
+
+
+
+	<table class="table tableheader table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>Product</th>
+				<th>Category</th>
+				<th>SellingPrice</th>
+				<th>Quantity</th>
+				<th>Update Quantity</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="product in products track by $index">
+				<td class="col-md-2">{{product.name}}</td>
+				<td class="col-md-2">{{product.category}}</td>
+				<td class="col-md-2">{{product.sellingPrice}}</td>
+				<td class="col-md-2">{{product.quantity}}</td>
+				<td class="form-group col-md-4">
+
+                <form  ng-submit="updateProductQuantity(product, productForm)" method="post" name="productForm" > 
+
+					<!--
+					//How to pass radio value to controller!
+					
+					 <div class="btn-group" style="float: left" data-toggle="buttons">
+						<label class="btn btn-default active"> 
+						   <input class="form-control" type="radio" ng-model="isAddStcoking" name="setQty" value="true" checked>Add</label> 
+						<label class="btn btn-default">
+						<input class="form-control" type="radio" ng-model="isAddStcoking" name="setQty" ng-click="setAddStcokingFalse(false)">Set</label>
+
+					</div> -->
+					
+					<div class="col-xs-5" style="float: left">
+						<input type="number" class="form-control" ng-init="0" ng-model="setquantity"  name="quantity" ng-required="true"/>
+					</div>
+
+					<div style="float: left">
+						<input  type="submit" value="Save" class="btn btn-xs btn-success" />
+					</div>
+					
+			     </form>
+					
+					
+
+
+				</td>
+			</tr>
+		</tbody>
+
+	</table>
+
+	<div ng-show='CustomerCtrl.busy'>Loading data...</div>
+
+
+
+
+</div>

@@ -1,9 +1,5 @@
 var app = angular.module("POSApp", [ 'ngRoute', 'infinite-scroll' ]);
 
-
-
-
-
 app.config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/Customers', {
 		templateUrl : 'static/views/customer.list.html',
@@ -13,10 +9,16 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : 'static/views/employee.list.html',
 		controller : 'EmployeeCtr1'
 	})
+	.when('/InventoryQuantity', {
+		templateUrl : 'static/views/InventoryQuantity.form.html',
+		controller : 'InventoryQuantityCtr1'
+	})
 	.otherwise({		
 		redirectTo : '/Customers'
 	});
 } ]);
+
+
 
 app.controller("MasterCtrl", function($scope, $http) {
 
@@ -106,19 +108,19 @@ app.controller("EmployeeCtr1", function($scope, $http, $window, $location,
 			return;
 		}
 		
-		//Create new Employee
+		// Create new Employee
 		if (instanceId == null){
 			User.instanceId = User.name;
 			$scope.invokeAddEmployee (User, employeeForm);
 		}
-		else if (instanceId != null){ //Update existing employee
+		else if (instanceId != null){ // Update existing employee
 			
 			/*
 			 * Update the password only if user has updated it
 			 */
 			if (initialPassword != User.password){
 				
-				//Base64  Encoded
+				// Base64 Encoded
 				User.password = btoa(User.password);
 				
 			}
@@ -414,3 +416,82 @@ app.controller("CustomerCtrl",function($scope, $http, $window, $route, $filter) 
 					
 
 				});
+
+app.controller("InventoryQuantityCtr1", function($scope, $http, $window, $location,
+		$route) {
+	
+	var initialPassword;
+	
+	$scope.products = [];
+	result = null;
+	$scope.currentPage = 0;
+	this.busy = false;
+	$scope.isAddStcoking = [];
+
+	// __init__ methods
+	$scope.invokeLoadProducts = function() {
+
+		// $scope.currentPage++;
+
+		$scope.loadProducts(1000);
+	}
+
+	$scope.loadProducts = function(limit) {
+
+		if (this.busy)
+			return;
+		this.busy = true;
+
+		$scope.currentPage++;
+
+		$http.get("/Product/list/p" + $scope.currentPage + "/" + limit).success(
+				function(result) {
+
+					for (var index = 0; index < result.length; index++) {
+
+						$scope.products.push(result[index]);
+					}
+
+				}).error(function() {
+			alert("Unable to load Products")
+		})
+
+		this.busy = false;
+
+	}
+	
+	$scope.updateProductQuantity = function(product, productForm){
+		
+	
+		product.quantity = product.quantity + parseInt(productForm.quantity.$viewValue, 10);
+		
+		$http(
+				{
+					method : 'put',
+					url : '/Product/' + product.instanceId
+							+ '/update',
+					headers : {
+						'Content-Type' : 'application/x-www-form-urlencoded'
+					},
+					data : $.param(product)
+				})
+				.success(
+						function(data, status, headers, config) {
+
+							
+							//$route.reload();
+
+						})
+				.error(function(data, status, headers, config) {
+					$window.alert("Product is not persisted")
+				});
+	}
+	
+	
+	
+});
+
+
+
+
+              
