@@ -65,9 +65,18 @@
 					<li class="sidebar-brand"><a href="#">Master </a></li>
 
 
-					<li ng-repeat="tab in ['Contacts', 'InventoryQuantity']"
+					<!-- <li ng-repeat="tab in ['Contacts', 'InventoryQuantity', 'Store Config']"
 						ng-class="sidebarSelectedTab == tab?'sidebarActive':''"><a
-						href="#{{tab}}" ng-click="setSidebarSelectedTab(tab)">{{tab}}</a></li>
+						href="#{{tab}}" ng-click="setSidebarSelectedTab(tab)">{{tab}}</a></li> -->
+						<li ng-class="sidebarSelectedTab == 'Contacts'?'sidebarActive':''">
+						  <a href="#Contacts" ng-click="setSidebarSelectedTab('Contacts')">Contacts</a>
+                        </li>
+                        <li ng-class="sidebarSelectedTab == 'InventoryQuantity'?'sidebarActive':''">
+                          <a href="#InventoryQuantity" ng-click="setSidebarSelectedTab('InventoryQuantity')">InventoryQuantity</a>
+                        </li>
+                        <li ng-class="sidebarSelectedTab == 'StoreConfig'?'sidebarActive':''">
+                          <a href="#StoreConfig" ng-click="setSidebarSelectedTab('StoreConfig')">Store Config</a>
+                        </li>
 
 				</ul>
 			</div>
@@ -109,6 +118,7 @@
 
 <script src="../static/lib/ng-infinite-scroll.js"></script>
 <script src="../static/js/master.controller.js"></script>
+
 
 
 </html>

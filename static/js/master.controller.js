@@ -1,5 +1,36 @@
 var app = angular.module("POSApp", [ 'ngRoute', 'infinite-scroll' ]);
 
+app.service('commonService', function($http, $route, $location, $window){
+    
+    this.delete = function(record, recordStrName ) { 
+    	
+    	
+    	$http
+		.delete(
+				"/"+recordStrName+"/"+record.instanceId+"/delete")
+		.success(
+				function(result) {
+					
+					alert(recordStrName +" record is deleted");
+					
+					// Loading Employee section alone.. No full page reload
+					$location = $window.location.origin + '/master#/'+recordStrName;
+					$route.reload();
+				
+				}).error(function() {
+			
+					alert("Unable to delete "+recordStrName);
+					return false;
+		})
+    	
+    };  
+    
+    
+ 
+});
+
+
+
 app.config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/Customers', {
 		templateUrl : 'static/views/customer.list.html',
@@ -13,6 +44,10 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : 'static/views/InventoryQuantity.form.html',
 		controller : 'InventoryQuantityCtr1'
 	})
+	.when('/StoreConfig', {
+		templateUrl : 'static/views/StoreConfig.form.html',
+		controller : 'StoreConfigCtr1'
+	})
 	.otherwise({		
 		redirectTo : '/Customers'
 	});
@@ -20,11 +55,13 @@ app.config([ '$routeProvider', function($routeProvider) {
 
 
 
-app.controller("MasterCtrl", function($scope, $http) {
+app.controller("MasterCtrl", function($scope, $http, $location) {
 
 	$scope.selectedTab = 'Customers';
+	//$scope.sidebarSelectedTab = $location.url().slice(1);
 	$scope.sidebarSelectedTab = 'Contacts';
-
+	
+	
 	$scope.setSelectedTab = function(tabName) {
 		$scope.selectedTab = tabName;
 	}
@@ -57,7 +94,7 @@ app.controller("MasterCtrl", function($scope, $http) {
 });
 
 app.controller("EmployeeCtr1", function($scope, $http, $window, $location,
-		$route) {
+		$route, commonService) {
 	
 	var initialPassword;
 	
@@ -65,13 +102,18 @@ app.controller("EmployeeCtr1", function($scope, $http, $window, $location,
 	result = null;
 	$scope.currentPage = 0;
 	this.busy = false;
+	
+	$scope.delete = function(record, recordStrName){
+		$scope.successMsg = commonService.delete(record, recordStrName);
+		
+	}
 
 	// __init__ methods
 	$scope.invokeLoadEmployees = function() {
 
 		// $scope.currentPage++;
 
-		$scope.loadEmployees(1000);
+		$scope.loadEmployees(20);
 	}
 
 	$scope.loadEmployees = function(limit) {
@@ -87,8 +129,21 @@ app.controller("EmployeeCtr1", function($scope, $http, $window, $location,
 				function(result) {
 
 					for (var index = 0; index < result.length; index++) {
-
-						$scope.employees.push(result[index]);
+						
+						/*
+						 * Add employee only if employee name is present in the object.
+						 * 
+						 * Default user (anonymous@erpfog.com) is not loaded with user info. so not displaying in UI.
+						 *  
+						 */
+						if (typeof result[index].firstName == 'string')
+						{
+							$scope.employees.push(result[index]);
+						}
+						else{
+							continue;
+						}
+							
 					}
 
 				}).error(function() {
@@ -109,8 +164,7 @@ app.controller("EmployeeCtr1", function($scope, $http, $window, $location,
 		}
 		
 		// Create new Employee
-		if (instanceId == null){
-			User.instanceId = User.name;
+		if (instanceId == null){			
 			$scope.invokeAddEmployee (User, employeeForm);
 		}
 		else if (instanceId != null){ // Update existing employee
@@ -133,26 +187,46 @@ app.controller("EmployeeCtr1", function($scope, $http, $window, $location,
 	
 	$scope.invokeAddEmployee = function (User, employeeForm){
 		
-		$http({
-			method : 'post',
-			url : '/User/create',
-			headers : {
-				'Content-Type' : 'application/x-www-form-urlencoded'
-			},
-			data : $.param(User)
-		}).success(function(data, status, headers, config) {
-
-			$window.alert("Employee information is persisted successfully")
-			$('#addEmployeeModal').modal('hide');
-
-			// Loading Employee section alone.. No full page reload
-			$location = $window.location.origin + '/master#/Employees';
-			$route.reload();
-
-		}).error(function(data, status, headers, config) {
-			$window.alert("Employee is not persisted")
-		});
+			
+		$http
+			.get("/User/"+User.name+"/read")
+			.success(
+					function(result) {
+						
+						alert("Employee exist with email id "+User.name);
+							
+						
+					}).error(function() {
+				
+						//Create new employee only if email is not present already.
+						if (result == null){
+							
+							//Assign user name(Email Id) as instance id before persisting
+							User.instanceId = User.name;
+							
+							$http({
+								method : 'post',
+								url : '/User/create',
+								headers : {
+									'Content-Type' : 'application/x-www-form-urlencoded'
+								},
+								data : $.param(User)
+							}).success(function(data, status, headers, config) {
+	
+								$window.alert("Employee information is persisted successfully")
+								$('#addEmployeeModal').modal('hide');
+	
+								// Loading Employee section alone.. No full page reload
+								$location = $window.location.origin + '/master#/Employees';
+								$route.reload();
+	
+							}).error(function(data, status, headers, config) {
+								$window.alert("Employee is not persisted")
+							});
+						}
+			})
 		
+				
 	}
 	
 	$scope.invokeUpdateEmployee = function (User, employeeForm, instanceId){
@@ -233,7 +307,8 @@ app.controller("EmployeeCtr1", function($scope, $http, $window, $location,
 
 });
 
-app.controller("CustomerCtrl",function($scope, $http, $window, $route, $filter) {
+app.controller("CustomerCtrl",function($scope, $http, commonService, $window, $location,
+		$route) {
 					$scope.customers = [];
 					$scope.currentPageCustomers = [];
 					
@@ -243,10 +318,16 @@ app.controller("CustomerCtrl",function($scope, $http, $window, $route, $filter) 
 					
 					$scope.selectedTab = 'Customers';
 					$scope.sidebarSelectedTab = 'Contacts';
+					
+					
+					$scope.delete = function(record, recordStrName){
+						$scope.successMsg = commonService.delete(record, recordStrName);
+						
+					}
 
 					$scope.invokeLoadCustomers = function() {
 
-						$scope.loadCustomers(1000);
+						$scope.loadCustomers(20);
 					}
 
 					$scope.loadCustomers = function(limit) {
@@ -433,7 +514,7 @@ app.controller("InventoryQuantityCtr1", function($scope, $http, $window, $locati
 
 		// $scope.currentPage++;
 
-		$scope.loadProducts(1000);
+		$scope.loadProducts(20);
 	}
 
 	$scope.loadProducts = function(limit) {
@@ -492,6 +573,81 @@ app.controller("InventoryQuantityCtr1", function($scope, $http, $window, $locati
 });
 
 
+app.controller("StoreConfigCtr1",function($scope, $http, $window, $route, $filter) {
+	
+	$scope.stores = [];
+	
+	result = null;
+	
+	
+	loadStores();
+
+	
+	function loadStores() {
+		
+		/*$http
+				.get(
+						"/Store/list/p1/"+20)
+				.success(
+						function(result) {
+
+							for (var index = 0; index < result.length; index++) {
+
+								$scope.stores
+										.push(result[index]);
+							}
+
+						}).error(function() {
+				})*/
+				
+				
+				
+		$scope.stores = $http.get("/Store/list/p1/"+20);
+        $scope.stores.then(function(data){
+        $scope.stores = data.data;
+    	$scope.selectedStore = $scope.stores[0];
+
+        
+		    }, function(data){
+		        //error handling should go here
+		        window.alert('Unable to local Category count'+data);
+		});
+        		
+
+	}
+	
+	
+	$scope.updateStore = function(store, storeForm){
+		
+		$scope.successMsg = "";
+
+		
+		if (!storeForm.$valid) {
+			alert("Please check the entered data.")
+			return;
+		}
+		
+		$http({
+			method : 'put',
+			url : '/Store/'+store.instanceId+'/update',
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			},
+			data : $.param(store)
+		}).success(function(data, status, headers, config) {
+
+			$scope.successMsg = "Configuration is saved succesfully."
+
+
+		}).error(function(data, status, headers, config) {
+			$window.alert("Store info is not persisted")
+		});
+    	
+    }
+	
+	
+
+});
 
 
               

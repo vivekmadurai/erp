@@ -67,6 +67,23 @@ class Store(POS):
     adminUser = ndb.StringProperty()
     currency = ndb.StringProperty()
     branch = ndb.StringProperty()
+    address1 = ndb.StringProperty()
+    address2 = ndb.StringProperty()
+    city = ndb.StringProperty()
+    state = ndb.StringProperty()
+    pincode = ndb.StringProperty()
+    country = ndb.StringProperty()
+    phone =  ndb.StringProperty()    
+    discount = ndb.FloatProperty()
+    tax = ndb.FloatProperty()
+    timeZone =  ndb.StringProperty()
+    tax1Name =  ndb.StringProperty()
+    tax1Rate =  ndb.FloatProperty()
+    tax2Name =  ndb.StringProperty()
+    tax2Rate =  ndb.FloatProperty()
+    tax3Name =  ndb.StringProperty()
+    tax3Rate =  ndb.FloatProperty()
+    
 
 class StoreSubscription(POS):
     pass

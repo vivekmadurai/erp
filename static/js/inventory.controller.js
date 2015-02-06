@@ -5,9 +5,9 @@ app.config([ '$routeProvider', function($routeProvider) {
 		templateUrl : 'static/views/product.list.html',
 		controller : 'ProductCtrl'
 
-	}).when('/Categories', {
+	}).when('/Category', {
 		templateUrl : 'static/views/category.list.html',
-		controller : 'CategoryCtrl'
+		controller : 'CategoryCtr1'
 	}).otherwise({
 		redirectTo : '/Products'
 	});
@@ -104,7 +104,8 @@ app
 
 											$window
 													.alert("Product information is persisted successfully");
-											$('#addProductModal').modal('hide');
+											$('#addProductModal')
+													.modal('hide');
 
 											// Loading Employee section alone..
 											// No full page reload
@@ -118,8 +119,8 @@ app
 								});
 					}
 
-					$scope.invokeUpdateProduct = function(Product, productForm,
-							productInstanceId) {
+					$scope.invokeUpdateProduct = function(Product,
+							productForm, productInstanceId) {
 
 						$http(
 								{
@@ -136,7 +137,8 @@ app
 
 											$window
 													.alert("Product information is persisted successfully");
-											$('#addProductModal').modal('hide');
+											$('#addProductModal')
+													.modal('hide');
 
 											// Loading Employee section alone..
 											// No full page reload
@@ -200,185 +202,7 @@ app
 
 						$scope.product = product;
 					}
+					
+					
 
 				});
-
-app
-.controller(
-		"CategoryCtrl",
-		function($scope, $http, $window, $route, $filter) {
-			$scope.categories = [];
-
-			result = null;
-			$scope.currentPage = 0;
-			this.busy = false;
-
-			$scope.selectedTab = 'Categories';
-
-			$scope.invokeLoadCategories = function() {
-
-				$scope.loadCategories(1000);
-			}
-
-			$scope.loadCategories = function(limit) {
-
-				if (this.busy)
-					return;
-				this.busy = true;
-				$scope.selectedTab = 'Categories';
-
-				$scope.currentPage++;
-
-				$http
-						.get(
-								"/Category/list/p" + $scope.currentPage
-										+ "/" + limit)
-						.success(
-								function(result) {
-
-									for (var index = 0; index < result.length; index++) {
-
-										$scope.categories
-												.push(result[index]);
-									}
-
-								}).error(function() {
-							$scope.categories = null;
-							alert("Unable to load Category")
-						})
-
-				this.busy = false;
-
-			};
-
-			$scope.createCategory = function(Category, categoryForm,
-					categoryInstanceId) {
-
-				if (!categoryForm.$valid) {
-					alert("Please check the entered data.")
-					return;
-				}
-
-				if (categoryInstanceId == null) {
-					$scope.invokeAddCategory(Category, categoryForm);
-				} else if (categoryInstanceId != null) {
-					$scope.invokeUpdateCategory(Category, categoryForm,
-							categoryInstanceId);
-				}
-
-			}
-
-			$scope.invokeAddCategory = function(Category, categoryForm) {
-
-				$http(
-						{
-							method : 'post',
-							url : '/Category/create',
-							headers : {
-								'Content-Type' : 'application/x-www-form-urlencoded'
-							},
-							data : $.param(Category)
-						})
-						.success(
-								function(data, status, headers, config) {
-
-									$window
-											.alert("Category information is persisted successfully");
-									$('#addCategoryModal').modal('hide');
-
-									// Loading Employee section alone..
-									// No full page reload
-									$location = $window.location.origin
-											+ '/master#/Categories';
-									$route.reload();
-
-								})
-						.error(function(data, status, headers, config) {
-							$window.alert("Category is not persisted")
-						});
-			}
-
-			$scope.invokeUpdateCategory = function(Category, categoryForm,
-					categoryInstanceId) {
-
-				$http(
-						{
-							method : 'put',
-							url : '/Category/' + categoryInstanceId
-									+ '/update',
-							headers : {
-								'Content-Type' : 'application/x-www-form-urlencoded'
-							},
-							data : $.param(Category)
-						})
-						.success(
-								function(data, status, headers, config) {
-
-									$window
-											.alert("Category information is persisted successfully");
-									$('#addCategoryModal').modal('hide');
-
-									// Loading Employee section alone..
-									// No full page reload
-									$location = $window.location.origin
-											+ '/master#/Categories';
-									$route.reload();
-
-								})
-						.error(function(data, status, headers, config) {
-							$window.alert("Category is not persisted")
-						});
-			}
-
-			/*
-			 * Below functionality is used for save and save another.
-			 */
-			$scope.createCategoryAndSaveAnother = function(Category,
-					categoryForm) {
-
-				$scope.successMsg = "";
-
-				if (!categoryForm.$valid) {
-					alert("Please check the entered data.")
-					return;
-				}
-
-				$http(
-						{
-							method : 'post',
-							url : '/Category/create',
-							headers : {
-								'Content-Type' : 'application/x-www-form-urlencoded'
-							},
-							data : $.param(Category)
-						})
-						.success(
-								function(data, status, headers, config) {
-
-									$scope.resetForm(categoryForm);
-									$scope.successMsg = "Category is saved succesfully. Please save another Category"
-
-								})
-						.error(function(data, status, headers, config) {
-							$window.alert("Category is not persisted")
-						});
-
-			}
-
-			$scope.resetForm = function(categoryForm) {
-				categoryForm.$setPristine();
-				$scope.Category = {};
-			}
-
-			$scope.resetCategoryAddForm = function(category) {
-
-				$scope.category = {};
-
-			}
-
-			$scope.openwindow = function(category) {
-
-				$scope.category = category;
-			}
-
-		});
