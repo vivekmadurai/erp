@@ -59,14 +59,15 @@
 					    </div>
 					    <div class="form-group col-md-6">
 					        <label for="Category">Category</label>
-					        <div class="input-group">
+					        <div class="input-group">{{$scope.product.category}}
 					            <select class="form-control" ng-model="product.category" ng-init="product.category='All'">
-					            
-					                <option value="All">All</option>
-					
+					                <option  value="All" >
+                                       All
+                                    </option>
 					                <option  ng-repeat="category in categoryList" value="{{category.name}}" >
 					                    {{category.name}}
 					                </option>
+					                
 					            </select>
 					           
 					            <span class="input-group-addon">
@@ -133,7 +134,7 @@
 					    
 					    <div class="form-group col-md-12" align='center'>
 					        <button type="submit" class="btn btn-primary">Save</button>    
-					        <button ng-hide="customer.instanceId" type="button" ng-click="createProductAndSaveAnother(product, productForm)" class="btn btn-primary">Save and Continue</button>
+					        <button ng-hide="product.instanceId" type="button" ng-click="createProductAndSaveAnother(product, productForm)" class="btn btn-primary">Save and Continue</button>
 					        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> 
 					    </div>
 					</form>
