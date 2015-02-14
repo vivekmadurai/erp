@@ -1,46 +1,191 @@
-<dialog id="editProductWindow">  
-    <div ng-include="'/static/views/product.form.html'"></div>
-</dialog>
-   
-<dialog id="viewProductWindow">
-    <div ng-include="'/static/views/product.view.html'"></div>
-</dialog>
-  
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Product</th>
-      <th>Category</th>
-      <th>SellingPrice</th>
-      <th>Quantity</th>
-      <th>Edit/Delete</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="product in products">
-      <td>{{product.name}}</td>
-      <td>{{product.category}}</td>
-      <td>{{product.sellingPrice}}</td>
-      <td>{{product.quantity}}</td>
-      <td><a href="#" ng-click="openwindow(product.instanceId)">Edit</a>
-      <a href="#" ng-click="openViewProductWindow(product.instanceId)">View</a></td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <td colspan="5" align="center">
-        <div align="center">
-            <ul class="pager">
-              <li ng-class="prevPageDisabled()">
-                <a href ng-click="prevPage()">« Prev</a>
-              </li>
-              <li ng-repeat="n in range()" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
-                <a href="#">Page {{currentPage}} of {{totalPageCount}}</a>
-              </li>
-              <li ng-class="nextPageDisabled()">
-                <a href ng-click="nextPage()">Next »</a>
-              </li>
-            </ul>
-         </div>
-    </td>
-  </tfoot>
-</table>
+
+<div ng-controller='ProductCtrl'
+	infinite-scroll="invokeLoadProducts()" infinite-scroll-distance='0'
+	infinite-scroll-disabled='ProductCtrl.busy'>
+
+	<table width=100%>
+		<tr>
+			<td>
+				<h3>Products</h3>
+			</td>
+			<td align="right">
+
+				<button type="button" class="btn btn-success" ng-click="resetProductAddForm(product)" data-toggle="modal"
+					data-target="#addProductModal">
+					<span class="glyphicon glyphicon-ok"></span> Add Product
+				</button>
+
+			</td>
+		</tr>
+	</table>
+
+	<!-- Modal -->
+	<div class="modal fade" id="addProductModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Create New Customer</h4>
+				</div>
+				<div class="modal-body">
+					<!-- <div ng-include="'/static/views/product.form.html'"></div>  -->
+					
+					<form  ng-submit="createProduct(product, productForm, product.instanceId)" method="post" name="productForm" >     
+
+					    <div class="form-group col-md-12" >
+					        <label for="msg" class="info"><center><b>{{successMsg}}</b></center></label>             
+					    </div>
+					    
+					   
+					    <div class="form-group col-md-6" >
+					        <label class="requiredIcon" for="Name">Product Name </label>
+					        <div class="input-group">
+					            <input type="text" class="form-control" name="Name" ng-model="product.name" placeholder="Product Name" required>
+                                <span class="input-group-addon danger">
+
+					        </div>
+					        
+					    </div>
+					    <div class="form-group col-md-6">
+					        <label for="EAN13">EAN13</label>
+					        <div class="input-group">
+					            <input type="text" class="form-control" ng-model="product.ean13" placeholder="Barcode EAN Value">
+					            <span class="input-group-addon">
+					        </div>
+					    </div>
+					    <div class="form-group col-md-6">
+					        <label for="Category">Category</label>
+					        <div class="input-group">{{$scope.product.category}}
+					            <select class="form-control" ng-model="product.category" ng-init="product.category='All'">
+					                <option  value="All" >
+                                       All
+                                    </option>
+					                <option  ng-repeat="category in categoryList" value="{{category.name}}" >
+					                    {{category.name}}
+					                </option>
+					                
+					            </select>
+					           
+					            <span class="input-group-addon">
+					            
+					        </div>
+					    </div>
+					    <div class="form-group col-md-6">
+					        <label for="validate-email">Expire Date</label>
+					        <div class="input-group">
+					            <input type="text" class="form-control" name="ExpDate" ng-model="product.expDate" placeholder="">
+					            <span class="input-group-addon">
+					        </div>
+					    </div>
+					    <div class="form-group col-md-6">
+					        <label class="requiredIcon">Buying Price</label>
+					        <div class="input-group" data-validate="number">
+					            <input type="number" class="form-control" name="BuyingPrice" ng-model="product.buyingPrice" placeholder="" required>
+					            <span class="input-group-addon danger">    
+					        </div>
+					    </div>
+					    <div class="form-group col-md-6">
+					        <label for="validate-length" class="requiredIcon">Selling Price</label>
+					        <div class="input-group" data-validate="number">
+					            <input type="number" class="form-control" name="SellingPrice" ng-model="product.sellingPrice" placeholder="" required>
+					            <span class="input-group-addon danger">
+					        </div>
+					    </div>
+					
+					    <div class="form-group col-md-6">
+					        <label for="Discount">Discount</label>
+					        <div class="input-group" data-validate="number">
+					            <input type="number" class="form-control" name="Discount" ng-model="product.discount" placeholder="Enter Discount Percentage" >
+					            <span class="input-group-addon">
+					        </div>
+					    </div>
+					    <div class="form-group col-md-6">
+					        <label for="Quantity" class="requiredIcon">Quantity</label>
+					        <div class="input-group" data-validate="number">
+					            <input type="number" class="form-control" name="Quantity" ng-model="product.quantity" placeholder="Enter initial Product Quantity" required>
+					            <span class="input-group-addon danger">
+					        </div>
+					    </div>
+					    <div class="form-group col-md-6">
+					        <label for="Reorder" class="requiredIcon">Reorder Level</label>
+					        <div class="input-group" data-validate="number">
+					            <input type="number" class="form-control" name="Reorder" ng-model="product.reorder" placeholder="Threshold Quantity" required>
+					            <span class="input-group-addon danger">
+					        </div>
+					    </div>
+					    <div class="form-group col-md-6">
+					        <label for="Location">Location</label>
+					        <div class="input-group" data-validate="length" data-length="5">
+					            <input type="text" class="form-control" name="Location" ng-model="product.location" placeholder="Product Location">
+					            <span class="input-group-addon">
+					        </div>
+					    </div>
+					    <div class="form-group col-md-12">
+					        <label for="Description">Product Description</label>
+					        <div class="input-group" data-validate="length" data-length="5">
+					            <textarea type="text" class="form-control" name="Description" ng-model="product.description" placeholder="Validate Length" ></textarea>
+					            <span class="input-group-addon">
+					        </div>
+					    </div>
+					    
+					    <div class="form-group col-md-12" align='center'>
+					        <button type="submit" class="btn btn-primary">Save</button>    
+					        <button ng-hide="product.instanceId" type="button" ng-click="createProductAndSaveAnother(product, productForm)" class="btn btn-primary">Save and Continue</button>
+					        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> 
+					    </div>
+					</form>
+
+				</div>
+				<div class="modal-footer">
+					<div class="input-group col-md-12">
+
+						<span class="requiredIcon">Denotes Mandatory Fields</span>
+						
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<table class="table tableheader table-striped table-bordered">
+		<thead>
+			<tr>
+                <th>Product</th>
+				<th>Category</th>
+				<th>SellingPrice</th>
+				<th>Quantity</th>
+				<th>Edit/Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="product in products track by $index">
+		      <td>{{product.name}}</td>
+		      <td>{{product.category}}</td>
+		      <td>{{product.sellingPrice}}</td>
+		      <td>{{product.quantity}}</td>
+		      <td>
+                    <button ng-click="openwindow(product)" type="button"
+                        class="btn btn-xs btn-success" data-toggle="modal" data-target="#addProductModal">
+                        Edit</button>
+                </td>
+		    </tr>
+		</tbody>
+
+	</table>
+
+	<div ng-show='CustomerCtrl.busy'>Loading data...</div>
+
+
+
+
+</div>
+
+<script>
+
+</script>
+

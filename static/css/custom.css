@@ -117,9 +117,8 @@ dialog {
 }
 
 .input-group-addon.danger {
-	color: rgb(255, 255, 255);
-	background-color: orange;
-	border-color: rgb(212, 63, 58);
+	content: "*";
+	
 }
 
 .modal-body {
@@ -138,3 +137,30 @@ dialog {
     color: green;
 	
 }
+.requiredIcon:after  {
+	content: "*";
+	color: orange;
+	font-size: 12px;
+	
+}
+
+.requiredIcon  {
+    content: "*";
+    color: orange;
+    font-weight: 700;
+    
+}
+
+.mandatoryIcon{
+	content: "*";
+    font-size: 1px;
+    float:left;
+    color: orange
+}
+
+.updateStock {
+list-style: none;
+margin: 5px;
+display: inline-block;
+}
+

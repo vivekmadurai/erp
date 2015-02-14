@@ -65,9 +65,18 @@
 					<li class="sidebar-brand"><a href="#">Master </a></li>
 
 
-					<li ng-repeat="tab in ['Contacts']"
+					<!-- <li ng-repeat="tab in ['Contacts', 'InventoryQuantity', 'Store Config']"
 						ng-class="sidebarSelectedTab == tab?'sidebarActive':''"><a
-						href="#{{tab}}" ng-click="setSidebarSelectedTab(tab)">{{tab}}</a></li>
+						href="#{{tab}}" ng-click="setSidebarSelectedTab(tab)">{{tab}}</a></li> -->
+						<li ng-class="sidebarSelectedTab == 'Contacts'?'sidebarActive':''">
+						  <a href="#Contacts" ng-click="setSidebarSelectedTab('Contacts')">Contacts</a>
+                        </li>
+                        <li ng-class="sidebarSelectedTab == 'InventoryQuantity'?'sidebarActive':''">
+                          <a href="#InventoryQuantity" ng-click="setSidebarSelectedTab('InventoryQuantity')">InventoryQuantity</a>
+                        </li>
+                        <li ng-class="sidebarSelectedTab == 'StoreConfig'?'sidebarActive':''">
+                          <a href="#StoreConfig" ng-click="setSidebarSelectedTab('StoreConfig')">Store Config</a>
+                        </li>
 
 				</ul>
 			</div>
@@ -75,24 +84,20 @@
 				<!-- Nav tabs -->
 				<!-- Tab panes -->
 				<div>
-					<div class="tab-pane active">
-					
-					<!-- Performance is much important than anything else so moving to old age code -->
-					<!-- 	<ul class="nav nav-tabs">
-							<li ng-repeat="tab in ['Customers', 'Employees']"
-								ng-class="selectedTab == tab?'active':''"><a
-								href="#{{tab}}" ng-click="setSelectedTab(tab)">{{tab}}</a></li>
-						</ul> -->
-						
+					<div class="tab-pane active" ng-show="sidebarSelectedTab == 'Contacts'">
 						<ul class="nav nav-tabs">
                             <li ng-class="selectedTab == 'Customers'?'active':''"><a
                                 href="#Customers" ng-click="setSelectedTab('Customers')">Customers</a></li>
                                 
                             <li ng-class="selectedTab == 'Employees'?'active':''"><a
                                 href="#Employees" ng-click="setSelectedTab('Employees')">Employees</a></li>
-                        </ul>
-						
+                        </ul>						
 					</div>
+					
+					<div class="tab-pane active" ng-show="sidebarSelectedTab == 'Inventory'">
+                                          
+                    </div>
+                    
 					<div id="tabcontrol" ng-view></div>
 
 				</div>
@@ -113,6 +118,7 @@
 
 <script src="../static/lib/ng-infinite-scroll.js"></script>
 <script src="../static/js/master.controller.js"></script>
+
 
 
 </html>
